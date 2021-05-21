@@ -90,11 +90,6 @@ int vertexCount = myCubeVertexCount;
 
 GLuint tex0;
 
-std::vector<glm::vec4> verts;
-std::vector<glm::vec4> norms;
-std::vector<glm::vec2> textureCoords;
-std::vector<unsigned int> indices;
-
 Object3D blackBear, cer;
 
 
@@ -161,9 +156,6 @@ GLuint readTexture(const char* filename) {
 	return tex;
 }
 
-
-
-
 void drawTestObject(glm::mat4 P,glm::mat4 V, glm::mat4 M, glm::vec4 lightSource) {
 	
 	M = glm::translate(M, glm::vec3(0.0f, 1.0f, -3.0f));
@@ -182,7 +174,7 @@ void drawTestObject(glm::mat4 P,glm::mat4 V, glm::mat4 M, glm::vec4 lightSource)
 
 	glEnableVertexAttribArray(sp->a("normal"));  //Włącz przesyłanie danych do atrybutu normal
 	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, blackBear.norms.data()); //Wskaż tablicę z danymi dla atrybutu normal
-															// Dlaczego przez blackBear.getNorms().data()
+															// Dlaczego przez blackBear.getNorms().data() nie działa?
 
 	glEnableVertexAttribArray(sp->a("texCoord0"));  //Włącz przesyłanie danych do atrybutu normal
 	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, blackBear.textureCoords.data()); //Wskaż tablicę z danymi dla atrybutu normal

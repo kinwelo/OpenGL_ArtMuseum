@@ -7,9 +7,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "constants.h"
-#include "lodepng.h"
-#include "shaderprogram.h"
-#include "tt.h"
 #include <OBJ_Loader.h>
 
 #include <assimp\Importer.hpp>
