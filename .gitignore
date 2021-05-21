@@ -359,3 +359,4 @@ glm/
 *.filters
 tt.h
 OBJ_Loader.h
+/CppProperties.json

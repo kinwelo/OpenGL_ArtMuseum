@@ -34,8 +34,9 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "myCube.h"
 #include "myTeapot.h"
 #include "tt.h"
+#include "Object3D.h"
 #include <OBJ_Loader.h>
-//Assimp
+
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -69,6 +70,8 @@ float* texCoords = myCubeTexCoords;
 int vertexCount = myCubeVertexCount;
 
 
+
+
 ////Odkomentuj, żeby rysować czajnik
 //float* vertices = myTeapotVertices;
 ///* float* normals = myTeapotNormals;
@@ -87,12 +90,12 @@ int vertexCount = myCubeVertexCount;
 
 GLuint tex0;
 
-//Film assimp 45minuta: to powinno byc w klasie obiekt3d
 std::vector<glm::vec4> verts;
 std::vector<glm::vec4> norms;
 std::vector<glm::vec2> textureCoords;
 std::vector<unsigned int> indices;
 
+Object3D blackBear, cer;
 
 
 void keyCallback(
@@ -159,37 +162,7 @@ GLuint readTexture(const char* filename) {
 }
 
 
-void loadModel(std::string plik) {
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(plik,
-		aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals
-	);
-	std::cout << importer.GetErrorString() << std::endl;
 
-	aiMesh* mesh = scene->mMeshes[0];
-	for (int i = 0; i < mesh->mNumVertices;i++) {
-		aiVector3D vertex = mesh->mVertices[i];
-		verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));
-
-		aiVector3D normal = mesh->mNormals[i];
-		norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));
-
-		//zalozenie ze mamy tylko zerowy zestaw tekstur(tylko 2d) 47 min co gdy nie
-
-		aiVector3D texCoord = mesh->mTextureCoords[0][i];
-		textureCoords.push_back(glm::vec2(texCoord.x,texCoord.y));
-
-	}
-
-	for (int i = 0; i < mesh->mNumFaces;i++) {
-		aiFace& face = mesh->mFaces[i];
-
-		for (int j = 0;j < face.mNumIndices;j++) {
-			indices.push_back(face.mIndices[j]);
-		}
-	}
-
-}
 
 void drawTestObject(glm::mat4 P,glm::mat4 V, glm::mat4 M, glm::vec4 lightSource) {
 	
@@ -205,21 +178,54 @@ void drawTestObject(glm::mat4 P,glm::mat4 V, glm::mat4 M, glm::vec4 lightSource)
 	glUniform4fv(sp->u("lp"), 1, glm::value_ptr(lightSource));
 
 	glEnableVertexAttribArray(sp->a("vertex"));  //Włącz przesyłanie danych do atrybutu vertex
-	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, verts.data()); //Wskaż tablicę z danymi dla atrybutu vertex
-
+	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, blackBear.verts.data()); //Wskaż tablicę z danymi dla atrybutu vertex
 
 	glEnableVertexAttribArray(sp->a("normal"));  //Włącz przesyłanie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, norms.data()); //Wskaż tablicę z danymi dla atrybutu normal
+	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, blackBear.norms.data()); //Wskaż tablicę z danymi dla atrybutu normal
+															// Dlaczego przez blackBear.getNorms().data()
 
 	glEnableVertexAttribArray(sp->a("texCoord0"));  //Włącz przesyłanie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, textureCoords.data()); //Wskaż tablicę z danymi dla atrybutu normal
+	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, blackBear.textureCoords.data()); //Wskaż tablicę z danymi dla atrybutu normal
 
 	glUniform1i(sp->u("textureMap0"), 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, tex0);
 
 	//glDrawArrays(GL_TRIANGLES, 0, vertexCount); //Narysuj obiekt
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+	glDrawElements(GL_TRIANGLES, blackBear.indices.size(), GL_UNSIGNED_INT, blackBear.indices.data());
+
+	glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
+	glDisableVertexAttribArray(sp->a("normal"));
+	glDisableVertexAttribArray(sp->a("texCoord0"));
+
+
+	M = glm::translate(M, glm::vec3(7.0f, 0.0f, 5.0f));
+	M = glm::rotate(M, 230 * PI / 180, glm::vec3(0.0f, 1.0f, 0.0f));
+	sp->use();//Aktywacja programu cieniującego
+	//Przeslij parametry programu cieniującego do karty graficznej
+	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
+	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
+
+
+	glUniform4fv(sp->u("lp"), 1, glm::value_ptr(lightSource));
+
+	glEnableVertexAttribArray(sp->a("vertex"));  //Włącz przesyłanie danych do atrybutu vertex
+	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, cer.verts.data()); //Wskaż tablicę z danymi dla atrybutu vertex
+
+	glEnableVertexAttribArray(sp->a("normal"));  //Włącz przesyłanie danych do atrybutu normal
+	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, cer.norms.data()); //Wskaż tablicę z danymi dla atrybutu normal
+															// Dlaczego przez blackBear.getNorms().data()
+
+	glEnableVertexAttribArray(sp->a("texCoord0"));  //Włącz przesyłanie danych do atrybutu normal
+	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, cer.textureCoords.data()); //Wskaż tablicę z danymi dla atrybutu normal
+
+	glUniform1i(sp->u("textureMap0"), 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex0);
+
+	//glDrawArrays(GL_TRIANGLES, 0, vertexCount); //Narysuj obiekt
+	glDrawElements(GL_TRIANGLES, cer.indices.size(), GL_UNSIGNED_INT, cer.indices.data());
 
 	glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
 	glDisableVertexAttribArray(sp->a("normal"));
@@ -237,8 +243,10 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window, keyCallback);
 
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
-	tex0 = readTexture("steel.png");
-	loadModel(std::string("BlackBear.obj"));
+	tex0 = readTexture("assets/materials/steel.png");
+	
+	blackBear.loadModel(std::string("assets/BlackBear/BlackBear.obj"));
+	cer.loadModel(std::string("assets/cer/cer.obj"));
 }
 
 
