@@ -90,8 +90,31 @@ int vertexCount = myCubeVertexCount;
 
 GLuint tex0;
 
-Object3D blackBear, cer;
+Object3D blackBear("assets/BlackBear/BlackBear.obj"),
+	cer("assets/cer/cer.obj");
 
+GLuint readTexture(const char* filename) {
+	GLuint tex;
+	glActiveTexture(GL_TEXTURE0);
+
+	//Wczytanie do pamięci komputera
+	std::vector<unsigned char> image;   //Alokuj wektor do wczytania obrazka
+	unsigned width, height;   //Zmienne do których wczytamy wymiary obrazka
+	//Wczytaj obrazek
+	unsigned error = lodepng::decode(image, width, height, filename);
+
+	//Import do pamięci karty graficznej
+	glGenTextures(1, &tex); //Zainicjuj jeden uchwyt
+	glBindTexture(GL_TEXTURE_2D, tex); //Uaktywnij uchwyt
+	//Wczytaj obrazek do pamięci KG skojarzonej z uchwytem
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return tex;
+}
 
 void keyCallback(
 	GLFWwindow* window,
@@ -133,98 +156,6 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-GLuint readTexture(const char* filename) {
-	GLuint tex;
-	glActiveTexture(GL_TEXTURE0);
-
-	//Wczytanie do pamięci komputera
-	std::vector<unsigned char> image;   //Alokuj wektor do wczytania obrazka
-	unsigned width, height;   //Zmienne do których wczytamy wymiary obrazka
-	//Wczytaj obrazek
-	unsigned error = lodepng::decode(image, width, height, filename);
-
-	//Import do pamięci karty graficznej
-	glGenTextures(1, &tex); //Zainicjuj jeden uchwyt
-	glBindTexture(GL_TEXTURE_2D, tex); //Uaktywnij uchwyt
-	//Wczytaj obrazek do pamięci KG skojarzonej z uchwytem
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0,
-		GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	return tex;
-}
-
-void drawTestObject(glm::mat4 P,glm::mat4 V, glm::mat4 M, glm::vec4 lightSource) {
-	
-	M = glm::translate(M, glm::vec3(0.0f, 1.0f, -3.0f));
-	M = glm::rotate(M, 180*PI/180, glm::vec3(0.0f, 1.0f, 0.0f));
-	sp->use();//Aktywacja programu cieniującego
-	//Przeslij parametry programu cieniującego do karty graficznej
-	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
-
-
-	glUniform4fv(sp->u("lp"), 1, glm::value_ptr(lightSource));
-
-	glEnableVertexAttribArray(sp->a("vertex"));  //Włącz przesyłanie danych do atrybutu vertex
-	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, blackBear.verts.data()); //Wskaż tablicę z danymi dla atrybutu vertex
-
-	glEnableVertexAttribArray(sp->a("normal"));  //Włącz przesyłanie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, blackBear.norms.data()); //Wskaż tablicę z danymi dla atrybutu normal
-															// Dlaczego przez blackBear.getNorms().data() nie działa?
-
-	glEnableVertexAttribArray(sp->a("texCoord0"));  //Włącz przesyłanie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, blackBear.textureCoords.data()); //Wskaż tablicę z danymi dla atrybutu normal
-
-	glUniform1i(sp->u("textureMap0"), 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex0);
-
-	//glDrawArrays(GL_TRIANGLES, 0, vertexCount); //Narysuj obiekt
-	glDrawElements(GL_TRIANGLES, blackBear.indices.size(), GL_UNSIGNED_INT, blackBear.indices.data());
-
-	glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
-	glDisableVertexAttribArray(sp->a("normal"));
-	glDisableVertexAttribArray(sp->a("texCoord0"));
-
-
-	M = glm::translate(M, glm::vec3(7.0f, 0.0f, 5.0f));
-	M = glm::rotate(M, 230 * PI / 180, glm::vec3(0.0f, 1.0f, 0.0f));
-	sp->use();//Aktywacja programu cieniującego
-	//Przeslij parametry programu cieniującego do karty graficznej
-	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
-
-
-	glUniform4fv(sp->u("lp"), 1, glm::value_ptr(lightSource));
-
-	glEnableVertexAttribArray(sp->a("vertex"));  //Włącz przesyłanie danych do atrybutu vertex
-	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, cer.verts.data()); //Wskaż tablicę z danymi dla atrybutu vertex
-
-	glEnableVertexAttribArray(sp->a("normal"));  //Włącz przesyłanie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, cer.norms.data()); //Wskaż tablicę z danymi dla atrybutu normal
-															// Dlaczego przez blackBear.getNorms().data()
-
-	glEnableVertexAttribArray(sp->a("texCoord0"));  //Włącz przesyłanie danych do atrybutu normal
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, cer.textureCoords.data()); //Wskaż tablicę z danymi dla atrybutu normal
-
-	glUniform1i(sp->u("textureMap0"), 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex0);
-
-	//glDrawArrays(GL_TRIANGLES, 0, vertexCount); //Narysuj obiekt
-	glDrawElements(GL_TRIANGLES, cer.indices.size(), GL_UNSIGNED_INT, cer.indices.data());
-
-	glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
-	glDisableVertexAttribArray(sp->a("normal"));
-	glDisableVertexAttribArray(sp->a("texCoord0"));
-
-}
-
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
@@ -235,10 +166,9 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window, keyCallback);
 
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
-	tex0 = readTexture("assets/materials/steel.png");
-	
-	blackBear.loadModel(std::string("assets/BlackBear/BlackBear.obj"));
-	cer.loadModel(std::string("assets/cer/cer.obj"));
+	GLuint steelTex = readTexture("assets/materials/steel.png");
+	blackBear.texture = steelTex;
+	cer.texture = steelTex;
 }
 
 
@@ -267,9 +197,8 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 	glm::vec4 zrSwiatla = glm::vec4(0, 20, -20, 1);
 	glm::mat4 M = glm::mat4(1.0f);
 
-
-	drawTestObject(P,V,M,zrSwiatla);
-	
+	blackBear.drawModel(sp, P, V, M, zrSwiatla, 0.0f, 1.0f, -3.0f, 180.0f);
+	cer.drawModel(sp, P, V, M, zrSwiatla, -10.0f, 0.0f, -5.0f, 50.0f);
 
 	glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
@@ -290,7 +219,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(1000, 1000, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
 	if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
 	{
