@@ -36,7 +36,8 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "tt.h"
 #include "Object3D.h"
 #include <OBJ_Loader.h>
-
+#include <firstMethodDrawing.h>
+#include <SecondMethodDrawing.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -90,7 +91,7 @@ int vertexCount = myCubeVertexCount;
 
 GLuint tex0;
 
-Object3D blackBear("assets/BlackBear/BlackBear.obj"),
+SecondMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
 	cer("assets/cer/cer.obj");
 
 GLuint readTexture(const char* filename) {
