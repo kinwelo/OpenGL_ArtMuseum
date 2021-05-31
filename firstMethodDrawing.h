@@ -23,6 +23,8 @@ public:
     {
 		M = glm::translate(M, glm::vec3(xAxis, yAxis, zAxis));
 		M = glm::rotate(M, rotate * PI / 180, glm::vec3(0.0f, 1.0f, 0.0f));
+		M = glm::scale(M, glm::vec3(1.0, 1.0, 1.0));
+
 		sp->use();//Aktywacja programu cieniuj¹cego
 		//Przeslij parametry programu cieniuj¹cego do karty graficznej
 		glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));

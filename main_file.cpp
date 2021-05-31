@@ -1,5 +1,11 @@
 
 /*
+Projekt Zaliczeniowy Grafika Komputerowa i Wizualizacja 2021
+Mateusz Olewnik i Mariusz Nowak
+Prowadzący: dr inż. Witold Andrzejewski 
+*/
+
+/*
 Niniejszy program jest wolnym oprogramowaniem; możesz go
 rozprowadzać dalej i / lub modyfikować na warunkach Powszechnej
 Licencji Publicznej GNU, wydanej przez Fundację Wolnego
@@ -33,34 +39,33 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "shaderprogram.h"
 #include "myCube.h"
 #include "myTeapot.h"
-#include "tt.h"
 #include "Object3D.h"
-#include <OBJ_Loader.h>
-#include <firstMethodDrawing.h>
 #include <SecondMethodDrawing.h>
+#include <RoomMethodDrawing.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
+
+//Speed+window parameters
 float speed_x = 0;
 float speed_y = 0;
 float aspectRatio = 1;
+float walk_speed = 0;
 
 //FPS free fly
 //WASD - obroty kamerą
 //Strzalka gora dol = latanie do przodu/tylu
-glm::vec3 pos = glm::vec3(0, 2, -15);
-float walk_speed = 0;
 
-glm::vec3 calcDir(float kat_x, float kat_y) {
-	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
-	glm::mat4 M = glm::rotate(glm::mat4(1.0f), kat_y, glm::vec3(0, 1, 0));
-	M = glm::rotate(M, kat_x, glm::vec3(1, 0, 0));
-	dir = M * dir;
-	return glm::vec3(dir); //wlasnosc wektora 3 liczbowego ucina wspolrzedne w z czteroliczbowych
-}
+//Polozenie poczatkowe: pozycja gracza i źródeł światła
+glm::vec3 pos = glm::vec3(0, 2, -0);
+glm::vec4 zrSwiatla = glm::vec4(0, 10, -15, 1);
 
 
+
+
+
+//All Shaders
 ShaderProgram* sp;
 
 
@@ -71,28 +76,25 @@ float* texCoords = myCubeTexCoords;
 int vertexCount = myCubeVertexCount;
 
 
-
-
-////Odkomentuj, żeby rysować czajnik
-//float* vertices = myTeapotVertices;
-///* float* normals = myTeapotNormals;
-//float* normals = myTeapotVertexNormals;//w tej formie mozna czesto wyeksportowac wektory normalnie w blenderze
-//float* texCoords = myTeapotTexCoords;
-//float* colors = myTeapotColors;
-////int vertexCount = myTeapotVertexCount;
-//
-
-//Test na konsultacje model.obj proba przerobienia na odpowiednie tablice
-
-//float* vertices = myVerts1;
-//float* normals = myVertNormals1;
-//float* texCoords = mytexCoords1;
-//int vertexCount =VertCount1;
-
+//All Textures
 GLuint tex0;
 
+
+
+//All models
 SecondMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
 	cer("assets/cer/cer.obj");
+RoomMethodDrawing room("assets/gallery/Museum.obj");
+RoomMethodDrawing room2ndpart("assets/gallery/Museum.obj");
+
+
+glm::vec3 calcDir(float kat_x, float kat_y) {
+	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
+	glm::mat4 M = glm::rotate(glm::mat4(1.0f), kat_y, glm::vec3(0, 1, 0));
+	M = glm::rotate(M, kat_x, glm::vec3(1, 0, 0));
+	dir = M * dir;
+	return glm::vec3(dir); //wlasnosc wektora 3 liczbowego ucina wspolrzedne w z czteroliczbowych
+}
 
 GLuint readTexture(const char* filename) {
 	GLuint tex;
@@ -129,8 +131,8 @@ void keyCallback(
 		if (key == GLFW_KEY_D) speed_y = -1;
 		if (key == GLFW_KEY_S) speed_x = 1;
 		if (key == GLFW_KEY_W) speed_x = -1;
-		if (key == GLFW_KEY_UP) walk_speed = 2;
-		if (key == GLFW_KEY_DOWN) walk_speed = -2;
+		if (key == GLFW_KEY_UP) walk_speed = 5;
+		if (key == GLFW_KEY_DOWN) walk_speed = -5;
 
 	}
 	if (action == GLFW_RELEASE) {
@@ -158,6 +160,15 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 
+void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
+	room2ndpart.drawModel(sp, P, V, M, zrSwiatla, -9.0f, 1.0f, 40.0f, 360.0f, 0.002f, 0.003f, 0.002f);
+	blackBear.drawModel(sp, P, V, M, zrSwiatla, -2.4f, 1.0f, 16.5f, 180.0f, 0.1f, 0.1f, 0.1f);
+	cer.drawModel(sp, P, V, M, zrSwiatla, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
+	room.drawModel(sp, P, V, M, zrSwiatla, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.002f);
+
+}
+
+
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
@@ -168,9 +179,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	GLuint steelTex = readTexture("assets/materials/steel.png");
+	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
+	room.texture = wallTex;
+	room2ndpart.texture = wallTex;
 }
+
 
 
 //Zwolnienie zasobów zajętych przez program
@@ -195,11 +210,11 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 		//glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 
 	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
-	glm::vec4 zrSwiatla = glm::vec4(0, 20, -20, 1);
 	glm::mat4 M = glm::mat4(1.0f);
 
-	blackBear.drawModel(sp, P, V, M, zrSwiatla, 0.0f, 1.0f, -3.0f, 180.0f);
-	cer.drawModel(sp, P, V, M, zrSwiatla, -10.0f, 0.0f, -5.0f, 50.0f);
+	
+	allDrawInOnePlace(P, V, M);
+
 
 	glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
@@ -207,9 +222,7 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 
 int main(void)
 {
-	//objl::Loader Loader;
-	//// Load .obj File
-	//bool loadout = Loader.LoadFile("model.obj");
+	
 
 	GLFWwindow* window; //Wskaźnik na obiekt reprezentujący okno
 
@@ -220,7 +233,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	window = glfwCreateWindow(1000, 1000, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
 	if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
 	{
@@ -255,7 +268,7 @@ int main(void)
 		pos += (float)(walk_speed * glfwGetTime()) * calcDir(kat_x, kat_y);//wylaczenie latania: zamiast katu X dac 0
 		glfwSetTime(0); //Zeruj timer
 		drawScene(window, kat_x, kat_y);
-//drawScene(window, angle_x, angle_y); //Wykonaj procedurę rysującą
+
 		glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
 	}
 

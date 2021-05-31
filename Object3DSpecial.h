@@ -23,10 +23,11 @@
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
-#ifndef Object3D_H
-#define Object3D_H
+#ifndef Object3DS_H
+#define Object3DS_H
 
-class Object3D
+class Object3DSpecial
+	//Alternatywna wersja klasy obiektu 3d dla specjalnych modeli jak:œciany muzeum czy sfera sceny o odwrotnych normalnych
 {
 protected:
 	std::vector<glm::vec4> verts;
@@ -40,11 +41,11 @@ public:
 	/*
 		plik - œcie¿ka do pliku obiektu 3D
 	*/
-	Object3D(std::string plik) {
-		loadModel(plik);
+	Object3DSpecial(std::string plik) {
+		loadModelAlt(plik);
 	}
 private:
-	void loadModel(std::string plik) {
+	void loadModelAlt(std::string plik) {
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(plik,
 			aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals
@@ -57,7 +58,7 @@ private:
 			verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));
 
 			aiVector3D normal = mesh->mNormals[i];
-			norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));
+			norms.push_back(glm::vec4(-normal.x, -normal.y, -normal.z, 0));
 
 			aiVector3D texCoord = mesh->mTextureCoords[0][i];
 			textureCoords.push_back(glm::vec2(texCoord.x, texCoord.y));
@@ -75,7 +76,7 @@ private:
 	}
 
 
-	
+
 public:
 	/*
 		P, V, M, lightSource - parametry programu cieniuj¹cego,

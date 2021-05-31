@@ -1,16 +1,14 @@
 #pragma once
-#include "Object3D.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "Object3DSpecial.h"
 
-class SecondMethodDrawing :
-    public Object3D
+class RoomMethodDrawing :
+	public Object3DSpecial
 {
 public:
-    SecondMethodDrawing(std::string plik) : Object3D(plik)
-    {
-        ;
-    }
+	RoomMethodDrawing(std::string plik) : Object3DSpecial(plik)
+	{
+		;
+	}
 
 	void drawModel(
 		ShaderProgram* sp,
