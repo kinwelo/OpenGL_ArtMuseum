@@ -42,6 +42,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Object3D.h"
 #include <SecondMethodDrawing.h>
 #include <RoomMethodDrawing.h>
+#include <SkyDrawingMethod.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -67,6 +68,8 @@ glm::vec4 zrSwiatla = glm::vec4(0, 10, -15, 1);
 
 //All Shaders
 ShaderProgram* sp;
+ShaderProgram* sp_l;
+
 
 
 //Odkomentuj, żeby rysować kostkę
@@ -84,8 +87,8 @@ GLuint tex0;
 //All models
 SecondMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
 	cer("assets/cer/cer.obj");
-RoomMethodDrawing room("assets/gallery/Museum.obj");
-RoomMethodDrawing room2ndpart("assets/gallery/Museum.obj");
+RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
+SkyDrawingMethod sky("assets/scene/Egg.obj");
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -161,11 +164,11 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 
 void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
-	room2ndpart.drawModel(sp, P, V, M, zrSwiatla, -9.0f, 1.0f, 40.0f, 360.0f, 0.002f, 0.003f, 0.002f);
+	room2ndpart.drawModel(sp_l, P, V, M, zrSwiatla, -9.0f, 1.0f, 40.0f, 360.0f, 0.002f, 0.003f, 0.002f);
 	blackBear.drawModel(sp, P, V, M, zrSwiatla, -2.4f, 1.0f, 16.5f, 180.0f, 0.1f, 0.1f, 0.1f);
 	cer.drawModel(sp, P, V, M, zrSwiatla, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
-	room.drawModel(sp, P, V, M, zrSwiatla, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.002f);
-
+	room.drawModel(sp_l, P, V, M, zrSwiatla, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.002f);
+	sky.drawModel(sp_l, P, V, M, zrSwiatla, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
 }
 
 
@@ -178,12 +181,15 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window, keyCallback);
 
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
+	sp_l = new ShaderProgram("v_lambert.glsl", NULL, "f_lambert.glsl");
 	GLuint steelTex = readTexture("assets/materials/steel.png");
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
+	GLuint skyTex = readTexture("assets/materials/clearsky.png");
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
 	room.texture = wallTex;
 	room2ndpart.texture = wallTex;
+	sky.texture = skyTex;
 }
 
 
@@ -193,6 +199,7 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
 
 	delete sp;
+	delete sp_l;
 }
 
 
@@ -209,7 +216,7 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 		//glm::vec3(0, 0, 0),
 		//glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 
-	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
+	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 300.0f); //Wylicz macierz rzutowania
 	glm::mat4 M = glm::mat4(1.0f);
 
 	

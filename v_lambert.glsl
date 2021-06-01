@@ -17,13 +17,14 @@ out vec4 n;
 out vec4 v;
 out vec2 iTexCoord0;
 
-void main(void) {
-//Glowny i najprostszy model w projekcie: Model phonga z odbiciem i sparametryzowanymi zrodlami swiatla
 
+void main(void) {
+    
   l = normalize(V*lp - V*M*vertex);
   n = normalize(V*M*normal);
   v = normalize(vec4(0,0,0,1) - V*M*vertex);
   iTexCoord0=texCoord0;
  
     gl_Position=P*V*M*vertex;
+ 
 }
