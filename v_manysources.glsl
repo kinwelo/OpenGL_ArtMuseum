@@ -21,9 +21,7 @@ out vec2 iTexCoord0;
 
 void main(void) {
 //Glowny i najprostszy model w projekcie: Model phonga z odbiciem i sparametryzowanymi zrodlami swiatla
-//vec4 lp[2];
-//lp[0]=lpx;
-//lp[1]=lpx2;
+
   
   //Dla kazdego zrodla swiatla:
   for (int i=0;i<2;i++) {

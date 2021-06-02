@@ -89,7 +89,7 @@ public:
 		glm::mat4 P,
 		glm::mat4 V,
 		glm::mat4 M,
-		glm::vec4 lightSource,
+		glm::vec4 lightSource[],
 		float xAxis,
 		float yAxis,
 		float zAxis,
