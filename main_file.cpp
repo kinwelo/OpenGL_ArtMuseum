@@ -61,7 +61,9 @@ float walk_speed = 0;
 //Polozenie poczatkowe: pozycja gracza i źródeł światła
 glm::vec3 pos = glm::vec3(0, 2, -0);
 glm::vec4 zrSwiatla = glm::vec4(-7, 10, 0, 1);
+glm::vec4 zrSwiatla2 = glm::vec4(2, 3, 30.0, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
+
 
 
 
@@ -69,6 +71,7 @@ glm::vec4 zrSwiatla = glm::vec4(-7, 10, 0, 1);
 //All Shaders
 ShaderProgram* sp;
 ShaderProgram* sp_l;
+ShaderProgram* sp_main;
 
 
 
@@ -135,8 +138,8 @@ void keyCallback(
 		if (key == GLFW_KEY_D) speed_y = -1;
 		if (key == GLFW_KEY_S) speed_x = 1;
 		if (key == GLFW_KEY_W) speed_x = -1;
-		if (key == GLFW_KEY_UP) walk_speed = 5;
-		if (key == GLFW_KEY_DOWN) walk_speed = -5;
+		if (key == GLFW_KEY_UP) walk_speed = 10;
+		if (key == GLFW_KEY_DOWN) walk_speed = -10;
 
 	}
 	if (action == GLFW_RELEASE) {
@@ -166,11 +169,11 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	room2ndpart.drawModel(sp_l, P, V, M, zrSwiatla, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.003f, 0.003f);
-	blackBear.drawModel(sp, P, V, M, zrSwiatla, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
-	cer.drawModel(sp, P, V, M, zrSwiatla, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
+	blackBear.drawModel(sp, P, V, M, zrSwiatla, zrSwiatla2, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
+	cer.drawModel(sp, P, V, M, zrSwiatla, zrSwiatla2, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
 	room.drawModel(sp_l, P, V, M, zrSwiatla, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.003f);
 	sky.drawModel(sp_l, P, V, M, zrSwiatla, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
-	painting.drawModel(sp_l, P, V, M, zrSwiatla, 3.0f, 2.5f, 5.0f, 90.0f, 1.0f, 1.0f, 0.001f);
+	painting.drawModel(sp, P, V, M, zrSwiatla, zrSwiatla2, 2.8f, 2.5f, 5.0f, 90.0f, 1.0f, 1.0f, 0.001f);
 
 }
 
@@ -185,6 +188,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	sp_l = new ShaderProgram("v_lambert.glsl", NULL, "f_lambert.glsl");
+	sp_main = new ShaderProgram("v_manysources.glsl", NULL, "f_manysources.glsl");
+
 	GLuint steelTex = readTexture("assets/materials/steel.png");
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");

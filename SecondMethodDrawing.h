@@ -18,6 +18,7 @@ public:
 		glm::mat4 V,
 		glm::mat4 M,
 		glm::vec4 lightSource,
+		glm::vec4 lightSource2,
 		float xAxis,
 		float yAxis,
 		float zAxis,
@@ -38,6 +39,7 @@ public:
 
 
 		glUniform4fv(sp->u("lp"), 1, glm::value_ptr(lightSource));
+		glUniform4fv(sp->u("lp2"), 1, glm::value_ptr(lightSource2));
 
 		glEnableVertexAttribArray(sp->a("vertex"));  //W³¹cz przesy³anie danych do atrybutu vertex
 		glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, verts.data()); //Wska¿ tablicê z danymi dla atrybutu vertex
