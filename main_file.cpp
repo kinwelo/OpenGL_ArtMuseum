@@ -63,6 +63,7 @@ float walk_speed = 0;
 glm::vec3 pos = glm::vec3(0, 2, -0);
 glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, 10, 1);
 glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
+glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
 glm::vec4 sources[2] = {zrSwiatla,zrSwiatla2};
 
@@ -83,18 +84,15 @@ float* texCoords = myCubeTexCoords;
 int vertexCount = myCubeVertexCount;
 
 
-//All Textures
-GLuint tex0;
-
-
 
 //All models
-MainDrawingMethod blackBear("assets/BlackBear/BlackBear.obj");
-MainDrawingMethod 	cer("assets/cer/cer.obj");
+MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
+MainDrawingMethod 	cer("assets/statues/cer.obj");
 RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 MainDrawingMethod  painting("assets/paintings/canvas.obj");
-
+MainDrawingMethod  frame("assets/paintings/frame.obj");
+MainDrawingMethod corridor("assets/gallery/corridor.obj");
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -169,13 +167,14 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 
 void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
-	room2ndpart.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.003f, 0.003f);
-	blackBear.drawModel(sp, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
-	cer.drawModel(sp, P, V, M, sources, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
-	room.drawModel(sp_l, P, V, M, sources, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.003f);
+	room2ndpart.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.0035f, 0.003f);
+	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
+	cer.drawModel(sp_main, P, V, M, sources, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
+	room.drawModel(sp_l, P, V, M, sources, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.0035f, 0.003f);
 	sky.drawModel(sp_l, P, V, M, sources, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
-	painting.drawModel(sp, P, V, M, sources, 2.8f, 2.5f, 5.0f, 90.0f, 1.0f, 1.0f, 0.001f);
-
+	painting.drawModel(sp_main, P, V, M, sources, 2.68f, 2.5f, 2.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 2.5f, 2.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.35f, 0.5f);
 }
 
 
@@ -201,6 +200,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	room2ndpart.texture = wallTex;
 	sky.texture = skyTex;
 	painting.texture = paintingTex1;
+	frame.texture = steelTex;
+	corridor.texture = wallTex;
 }
 
 
@@ -283,7 +284,7 @@ int main(void)
 		//angle_y += speed_y * glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
 		kat_x += speed_x * glfwGetTime();
 		kat_y += speed_y * glfwGetTime();
-		pos += (float)(walk_speed * glfwGetTime()) * calcDir(kat_x, kat_y);//wylaczenie latania: zamiast katu X dac 0
+		pos += (float)(walk_speed * glfwGetTime()) * calcDir(0, kat_y);//wylaczenie latania: zamiast katu X dac 0
 		glfwSetTime(0); //Zeruj timer
 		drawScene(window, kat_x, kat_y);
 
