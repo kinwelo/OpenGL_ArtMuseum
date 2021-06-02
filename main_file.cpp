@@ -40,6 +40,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "myCube.h"
 #include "myTeapot.h"
 #include "Object3D.h"
+#include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
 #include <RoomMethodDrawing.h>
 #include <SkyDrawingMethod.h>
@@ -61,9 +62,9 @@ float walk_speed = 0;
 //Polozenie poczatkowe: pozycja gracza i źródeł światła
 glm::vec3 pos = glm::vec3(0, 2, -0);
 glm::vec4 zrSwiatla = glm::vec4(-7, 10, 0, 1);
-glm::vec4 zrSwiatla2 = glm::vec4(2, 3, 30.0, 1);
+glm::vec4 zrSwiatla2 = glm::vec4(2, 3, 30, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
-
+glm::vec4 sources[2];
 
 
 
@@ -88,8 +89,8 @@ GLuint tex0;
 
 
 //All models
-SecondMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
-	cer("assets/cer/cer.obj");
+MainDrawingMethod blackBear("assets/BlackBear/BlackBear.obj");
+SecondMethodDrawing	cer("assets/cer/cer.obj");
 RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 SecondMethodDrawing painting("assets/paintings/canvas.obj");
