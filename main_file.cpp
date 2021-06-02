@@ -60,8 +60,8 @@ float walk_speed = 0;
 
 //Polozenie poczatkowe: pozycja gracza i źródeł światła
 glm::vec3 pos = glm::vec3(0, 2, -0);
-glm::vec4 zrSwiatla = glm::vec4(0, 10, -15, 1);
-
+glm::vec4 zrSwiatla = glm::vec4(-7, 10, 0, 1);
+//glm::vec4 zrSwiatla = glm::vec4(pos, 1);
 
 
 
@@ -89,6 +89,7 @@ SecondMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
 	cer("assets/cer/cer.obj");
 RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
+SecondMethodDrawing painting("assets/paintings/canvas.obj");
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -164,11 +165,13 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 
 void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
-	room2ndpart.drawModel(sp_l, P, V, M, zrSwiatla, -9.0f, 1.0f, 40.0f, 360.0f, 0.002f, 0.003f, 0.002f);
-	blackBear.drawModel(sp, P, V, M, zrSwiatla, -2.4f, 1.0f, 16.5f, 180.0f, 0.1f, 0.1f, 0.1f);
+	room2ndpart.drawModel(sp_l, P, V, M, zrSwiatla, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.003f, 0.003f);
+	blackBear.drawModel(sp, P, V, M, zrSwiatla, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
 	cer.drawModel(sp, P, V, M, zrSwiatla, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
-	room.drawModel(sp_l, P, V, M, zrSwiatla, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.002f);
+	room.drawModel(sp_l, P, V, M, zrSwiatla, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.003f, 0.003f);
 	sky.drawModel(sp_l, P, V, M, zrSwiatla, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
+	painting.drawModel(sp_l, P, V, M, zrSwiatla, 3.0f, 2.5f, 5.0f, 90.0f, 1.0f, 1.0f, 0.001f);
+
 }
 
 
@@ -185,11 +188,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint steelTex = readTexture("assets/materials/steel.png");
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
+	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
 	room.texture = wallTex;
 	room2ndpart.texture = wallTex;
 	sky.texture = skyTex;
+	painting.texture = paintingTex1;
 }
 
 
