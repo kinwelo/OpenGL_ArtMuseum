@@ -87,7 +87,7 @@ int vertexCount = myCubeVertexCount;
 
 //All models
 MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
-MainDrawingMethod 	cer("assets/statues/cer.obj");
+MainDrawingMethod cer("assets/statues/cer.obj");
 RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 MainDrawingMethod  painting("assets/paintings/canvas.obj");
@@ -219,6 +219,7 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 	delete sp;
 	delete sp_l;
+	delete sp_main;
 }
 
 
@@ -259,7 +260,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(1000, 1000, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	window = glfwCreateWindow(1000, 1000, "Art Museum", NULL, NULL);  //Utwórz okno  i kontekst OpenGL.
 
 	if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
 	{
@@ -287,8 +288,7 @@ int main(void)
 	glfwSetTime(0); //Zeruj timer
 	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
 	{
-		//angle_x += speed_x * glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
-		//angle_y += speed_y * glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
+		
 		kat_x += speed_x * glfwGetTime();
 		kat_y += speed_y * glfwGetTime();
 		pos += (float)(walk_speed * glfwGetTime()) * calcDir(kat_x, kat_y);//wylaczenie latania: zamiast katu X dac 0
