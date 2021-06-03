@@ -61,7 +61,7 @@ float walk_speed = 0;
 
 //Polozenie poczatkowe: pozycja gracza i źródeł światła
 glm::vec3 pos = glm::vec3(0, 2.5,0);
-glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, 0, 1);
+glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, -10, 1);
 glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
 glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
@@ -94,6 +94,8 @@ MainDrawingMethod  painting("assets/paintings/canvas.obj");
 MainDrawingMethod  frame("assets/paintings/frame.obj");
 RoomMethodDrawing corridor("assets/gallery/corridor.obj");
 RoomMethodDrawing  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+
+MainDrawingMethod  parquetry("assets/paintings/canvas.obj");
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -176,6 +178,8 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.47f, 0.5f);
 	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
 	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
+	parquetry.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f,25.0f, 0.0f, 11.8f, 0.1f, 80.7f);
+
 
 	//Museum statues
 	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
@@ -205,7 +209,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
 	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
-
+	GLuint floorTex = readTexture("assets/materials/steel.png");//Znalezc lepszy
 
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
@@ -217,6 +221,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
 	transition2.texture = wallTex;
+	parquetry.texture = floorTex;
 }
 
 
