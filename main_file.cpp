@@ -60,8 +60,8 @@ float walk_speed = 0;
 //Strzalka gora dol = latanie do przodu/tylu
 
 //Polozenie poczatkowe: pozycja gracza i źródeł światła
-glm::vec3 pos = glm::vec3(0, 2, -0);
-glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, 10, 1);
+glm::vec3 pos = glm::vec3(0, 2.5,0);
+glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, 0, 1);
 glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
 glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
@@ -92,7 +92,9 @@ RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 MainDrawingMethod  painting("assets/paintings/canvas.obj");
 MainDrawingMethod  frame("assets/paintings/frame.obj");
-MainDrawingMethod corridor("assets/gallery/corridor.obj");
+RoomMethodDrawing corridor("assets/gallery/corridor.obj");
+RoomMethodDrawing  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -168,10 +170,12 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Museum parts+scene
-	room.drawModel(sp_l, P, V, M, sources, 3.0f, 1.0f, -5.0f, 180.0f, 0.002f, 0.0035f, 0.003f);
-	room2ndpart.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.0035f, 0.003f);
+	room.drawModel(sp_l, P, V, M, sources, 3.0f, 1.0f, -15.0f, 180.0f, 0.002f, 0.0045f, 0.004f);
+	room2ndpart.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.0045f, 0.003f);
 	sky.drawModel(sp_l, P, V, M, sources, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
-	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.35f, 0.5f);
+	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.47f, 0.5f);
+	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
+	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
 
 	//Museum statues
 	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
@@ -201,6 +205,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
 	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
+
+
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
 	room.texture = wallTex;
@@ -209,6 +215,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	painting.texture = paintingTex1;
 	frame.texture = steelTex;
 	corridor.texture = wallTex;
+	transition.texture = wallTex;
+	transition2.texture = wallTex;
 }
 
 
