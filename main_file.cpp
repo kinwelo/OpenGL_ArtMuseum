@@ -209,7 +209,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
 	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
-	GLuint floorTex = readTexture("assets/materials/steel.png");//Znalezc lepszy
+	GLuint floorTex = readTexture("assets/materials/floor1.png");//Znalezc lepszy
 
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
