@@ -44,6 +44,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <SecondMethodDrawing.h>
 #include <RoomMethodDrawing.h>
 #include <SkyDrawingMethod.h>
+#include <EnvmapDrawingMethod.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -74,7 +75,7 @@ glm::vec4 sources[2] = {zrSwiatla,zrSwiatla2};
 ShaderProgram* sp;
 ShaderProgram* sp_l;
 ShaderProgram* sp_main;
-
+ShaderProgram* sp_envmap;
 
 
 //Odkomentuj, żeby rysować kostkę
@@ -90,12 +91,10 @@ MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
 RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
-MainDrawingMethod  painting("assets/paintings/canvas.obj");
-MainDrawingMethod  frame("assets/paintings/frame.obj");
+MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
 RoomMethodDrawing corridor("assets/gallery/corridor.obj");
 RoomMethodDrawing  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
-
-MainDrawingMethod  parquetry("assets/paintings/canvas.obj");
+MainDrawingMethod parquetry("assets/paintings/canvas.obj");
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -178,7 +177,7 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.47f, 0.5f);
 	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
 	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
-	parquetry.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f,25.0f, 0.0f, 11.8f, 0.1f, 80.7f);
+	parquetry.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f,25.0f, 0.0f, 12.0f, 0.1f, 80.7f);
 
 
 	//Museum statues
@@ -186,7 +185,7 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	cer.drawModel(sp_main, P, V, M, sources, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
 	
 	//Museum paintings+frames
-	painting.drawModel(sp_main, P, V, M, sources, 2.68f, 2.5f, 7.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	painting.drawModel(sp_envmap, P, V, M, sources, 2.68f, 2.5f, 7.0f, 90.0f, 1.0f, 1.0f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 2.5f, 7.0f, 90.0f, 0.5f, 0.5f, 0.5f);
 
 	
@@ -204,24 +203,29 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
 	sp_l = new ShaderProgram("v_lambert.glsl", NULL, "f_lambert.glsl");
 	sp_main = new ShaderProgram("v_manysources.glsl", NULL, "f_manysources.glsl");
+	sp_envmap = new ShaderProgram("v_envmap.glsl", NULL, "f_envmap.glsl");
 
 	GLuint steelTex = readTexture("assets/materials/steel.png");
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
 	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
-	GLuint floorTex = readTexture("assets/materials/floor1.png");//Znalezc lepszy
+	GLuint floorTex = readTexture("assets/materials/floor.png");//Znalezc lepszy if want
+	GLuint refTex = readTexture("assets/materials/sky.png");
+	GLuint frameTex = readTexture("assets/paintings/patterns/goldframe.png");
 
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
+	//cer.texture_refl = refTex;
 	room.texture = wallTex;
 	room2ndpart.texture = wallTex;
 	sky.texture = skyTex;
 	painting.texture = paintingTex1;
-	frame.texture = steelTex;
+	frame.texture = frameTex;
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
 	transition2.texture = wallTex;
 	parquetry.texture = floorTex;
+
 }
 
 
@@ -233,6 +237,7 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	delete sp;
 	delete sp_l;
 	delete sp_main;
+	delete sp_envmap;
 }
 
 

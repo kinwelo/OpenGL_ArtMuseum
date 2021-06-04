@@ -36,6 +36,7 @@ protected:
 
 public:
 	GLuint texture;
+	GLuint texture_refl;//only for special purposes like: enivorment mapping
 
 	/*
 		plik - œcie¿ka do pliku obiektu 3D
