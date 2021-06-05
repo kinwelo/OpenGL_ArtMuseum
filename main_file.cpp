@@ -61,7 +61,7 @@ float walk_speed = 0;
 //Strzalka gora dol = latanie do przodu/tylu
 
 //Polozenie poczatkowe: pozycja gracza i źródeł światła
-glm::vec3 pos = glm::vec3(0, 2.5,0);
+glm::vec3 pos = glm::vec3(-4, 2.8,-11);
 glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, -10, 1);
 glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
 glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
@@ -95,7 +95,8 @@ MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/painti
 RoomMethodDrawing corridor("assets/gallery/corridor.obj");
 RoomMethodDrawing  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
 MainDrawingMethod parquetry("assets/paintings/canvas.obj");
-
+MainDrawingMethod postument("assets/gallery/postument.obj");
+MainDrawingMethod door("assets/gallery/door.obj");
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -178,11 +179,12 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
 	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
 	parquetry.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f,25.0f, 0.0f, 12.0f, 0.1f, 80.7f);
+	door.drawModel(sp_l, P, V, M, sources, -3.6f, 1.05f, -14.9f, 0.0f, 0.0071f, 0.0071f, 0.0071f);
 
-
-	//Museum statues
+	//Museum statues and postuments
 	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
-	cer.drawModel(sp_main, P, V, M, sources, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
+	cer.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, -5.0f, 180.0f, 0.2f, 0.2f, 0.2f);
+	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, -5.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 	
 	//Museum paintings+frames
 	painting.drawModel(sp_envmap, P, V, M, sources, 2.68f, 2.5f, 7.0f, 90.0f, 1.0f, 1.0f, 0.003f);
@@ -212,6 +214,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint floorTex = readTexture("assets/materials/floor.png");//Znalezc lepszy if want
 	GLuint refTex = readTexture("assets/materials/sky.png");
 	GLuint frameTex = readTexture("assets/paintings/patterns/goldframe.png");
+	GLuint postumentTex = readTexture("assets/materials/pedestal.png");
+	GLuint doorTex = readTexture("assets/materials/door.png");
 
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
@@ -225,7 +229,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	transition.texture = wallTex;
 	transition2.texture = wallTex;
 	parquetry.texture = floorTex;
-
+	postument.texture = postumentTex;
+	door.texture = doorTex;
 }
 
 
