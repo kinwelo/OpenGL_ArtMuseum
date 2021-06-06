@@ -10,7 +10,6 @@
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "myCube.h"
-#include "myTeapot.h"
 #include "Object3D.h"
 #include <iostream>
 #include <vector>

@@ -38,11 +38,10 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "myCube.h"
-#include "myTeapot.h"
 #include "Object3D.h"
 #include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
-#include <RoomMethodDrawing.h>
+#include <RoomDrawingMethod.h>
 #include <SkyDrawingMethod.h>
 #include <EnvmapDrawingMethod.h>
 #include <assimp\Importer.hpp>
@@ -89,14 +88,16 @@ int vertexCount = myCubeVertexCount;
 //All models
 MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
-RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
+RoomDrawingMethod room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
-RoomMethodDrawing corridor("assets/gallery/corridor.obj");
-RoomMethodDrawing  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+MainDrawingMethod  painting2("assets/paintings/canvas.obj"), frame2("assets/paintings/frame.obj");
+RoomDrawingMethod corridor("assets/gallery/corridor.obj");
+RoomDrawingMethod  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
 MainDrawingMethod parquetry("assets/paintings/canvas.obj");
 MainDrawingMethod postument("assets/gallery/postument.obj");
-MainDrawingMethod door("assets/gallery/door.obj");
+MainDrawingMethod door("assets/gallery/door.obj"), door2("assets/gallery/door.obj"),quitdoor("assets/gallery/door.obj");
+MainDrawingMethod visitor1("assets/scene/character.obj");
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -179,18 +180,29 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
 	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
 	parquetry.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f,25.0f, 0.0f, 12.0f, 0.1f, 80.7f);
-	door.drawModel(sp_l, P, V, M, sources, -3.6f, 1.05f, -14.9f, 0.0f, 0.0071f, 0.0071f, 0.0071f);
+	door.drawModel(sp_l, P, V, M, sources, -3.6f, 1.05f, -14.90f, 0.0f, 0.0071f, 0.0071f, 0.0071f);
+	door2.drawModel(sp_l, P, V, M, sources, -2.47f, 1.05f, -14.965f, -180.0f, 0.0071f, 0.0071f, 0.0071f);
+	quitdoor.drawModel(sp_l, P, V, M, sources, 2.95f, 1.05f, 55.0f, 270.0f, 0.0071f, 0.0071f, 0.0071f);
+
+	//Visitors with simple "AI"
+	visitor1.drawModel(sp_l, P, V, M, sources, 0.0f, 1.0f, -10.0f, 20.0f, 0.13f, 0.13f, 0.13f);
 
 	//Museum statues and postuments
-	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
+	//Statue1Room1
 	cer.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, -5.0f, 180.0f, 0.2f, 0.2f, 0.2f);
 	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, -5.0f, 0.0f, 0.4f, 0.3f, 0.4f);
-	
-	//Museum paintings+frames
-	painting.drawModel(sp_envmap, P, V, M, sources, 2.68f, 2.5f, 7.0f, 90.0f, 1.0f, 1.0f, 0.003f);
-	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 2.5f, 7.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+
+	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
 
 	
+	//Museum paintings+frames
+	//Painting1Room1
+	painting.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -10.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -10.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+
+	painting2.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -6.0f, 90.0f, 1.4f, 1.4f, 0.003f);
+	frame2.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -6.0f, 90.0f, 0.7f, 0.7f, 0.7f);
+
 }
 
 
@@ -210,12 +222,19 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint steelTex = readTexture("assets/materials/steel.png");
 	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
-	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
-	GLuint floorTex = readTexture("assets/materials/floor.png");//Znalezc lepszy if want
+	GLuint paintingTex1 = readTexture("assets/paintings/patterns/abstract1.png");
+	GLuint paintingTex2 = readTexture("assets/paintings/patterns/painting1.png");
+	GLuint floorTex = readTexture("assets/materials/floor.png");
 	GLuint refTex = readTexture("assets/materials/sky.png");
 	GLuint frameTex = readTexture("assets/paintings/patterns/goldframe.png");
 	GLuint postumentTex = readTexture("assets/materials/pedestal.png");
 	GLuint doorTex = readTexture("assets/materials/door.png");
+
+	GLuint visitorTex1 = readTexture("assets/materials/skins/skin1.png");
+	GLuint visitorTex2 = readTexture("assets/materials/skins/skin2.png");
+	GLuint visitorTex3 = readTexture("assets/materials/skins/skin5.png");
+	GLuint visitorTex4 = readTexture("assets/materials/skins/skin6.png");
+
 
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
@@ -225,12 +244,17 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sky.texture = skyTex;
 	painting.texture = paintingTex1;
 	frame.texture = frameTex;
+	painting2.texture = paintingTex2;
+	frame2.texture = frameTex;
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
 	transition2.texture = wallTex;
 	parquetry.texture = floorTex;
 	postument.texture = postumentTex;
 	door.texture = doorTex;
+	door2.texture = doorTex;
+	quitdoor.texture = doorTex;
+	visitor1.texture = visitorTex1;
 }
 
 
