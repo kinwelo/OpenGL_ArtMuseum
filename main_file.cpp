@@ -43,6 +43,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <SecondMethodDrawing.h>
 #include <RoomDrawingMethod.h>
 #include <SkyDrawingMethod.h>
+#include <LionDrawingMethod.h>
 #include <EnvmapDrawingMethod.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -92,12 +93,18 @@ RoomDrawingMethod room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
 MainDrawingMethod  painting2("assets/paintings/canvas.obj"), frame2("assets/paintings/frame.obj");
+MainDrawingMethod  painting3("assets/paintings/canvas.obj"), frame3("assets/paintings/frame.obj");
+MainDrawingMethod  painting4("assets/paintings/canvas.obj"), frame4("assets/paintings/frame.obj");
+MainDrawingMethod  painting5("assets/paintings/canvas.obj"), frame5("assets/paintings/frame.obj");
+
 RoomDrawingMethod corridor("assets/gallery/corridor.obj");
 RoomDrawingMethod  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
 MainDrawingMethod parquetry("assets/paintings/canvas.obj");
-MainDrawingMethod postument("assets/gallery/postument.obj");
+MainDrawingMethod postument("assets/gallery/postument.obj"), postument2("assets/gallery/postument.obj");
 MainDrawingMethod door("assets/gallery/door.obj"), door2("assets/gallery/door.obj"),quitdoor("assets/gallery/door.obj");
 MainDrawingMethod visitor1("assets/scene/character.obj");
+LionDrawingMethod lionLeft("assets/statues/lion.obj"), lionRight("assets/statues/lion.obj"), brain("assets/statues/brain.obj");//brain uses lion because same rotations = no more redundant code
+
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -191,17 +198,32 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Statue1Room1
 	cer.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, -5.0f, 180.0f, 0.2f, 0.2f, 0.2f);
 	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, -5.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	//Statue2Room1
+	brain.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 0.0f,90.0f, 0.035f, 0.035f, 0.035f);
+	postument2.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 0.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	
+	//Statue1Room2
+	lionLeft.drawModel(sp_envmap, P, V, M, sources, 1.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
+	lionRight.drawModel(sp_envmap, P, V, M, sources, -7.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
 
 	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
-
 	
 	//Museum paintings+frames
 	//Painting1Room1
 	painting.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -10.0f, 90.0f, 1.0f, 1.0f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -10.0f, 90.0f, 0.5f, 0.5f, 0.5f);
-
+	//Painting2Room1
 	painting2.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -6.0f, 90.0f, 1.4f, 1.4f, 0.003f);
 	frame2.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -6.0f, 90.0f, 0.7f, 0.7f, 0.7f);
+	//Painting3Room1
+	painting3.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -2.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	frame3.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -2.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+	//Painting4Room1
+	painting4.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, -8.0f, 270.0f, 2.6f, 1.5f, 0.003f);
+	frame4.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -8.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+	//Painting5Room1
+	painting5.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, -2.0f, 270.0f, 2.6f, 1.5f, 0.003f);
+	frame5.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -2.0f, 270.0f, 1.2f, 0.7f, 0.7f);
 
 }
 
@@ -224,6 +246,10 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint skyTex = readTexture("assets/materials/clearsky.png");
 	GLuint paintingTex1 = readTexture("assets/paintings/patterns/abstract1.png");
 	GLuint paintingTex2 = readTexture("assets/paintings/patterns/painting1.png");
+	GLuint paintingTex3 = readTexture("assets/paintings/patterns/abstract2.png");
+	GLuint paintingTex4 = readTexture("assets/paintings/patterns/abstract3.png");
+	GLuint paintingTex5 = readTexture("assets/paintings/patterns/abstract4.png");
+
 	GLuint floorTex = readTexture("assets/materials/floor.png");
 	GLuint refTex = readTexture("assets/materials/sky.png");
 	GLuint frameTex = readTexture("assets/paintings/patterns/goldframe.png");
@@ -242,19 +268,35 @@ void initOpenGLProgram(GLFWwindow* window) {
 	room.texture = wallTex;
 	room2ndpart.texture = wallTex;
 	sky.texture = skyTex;
+
 	painting.texture = paintingTex1;
 	frame.texture = frameTex;
 	painting2.texture = paintingTex2;
 	frame2.texture = frameTex;
+	painting3.texture = paintingTex3;
+	frame3.texture = frameTex;
+	painting4.texture = paintingTex4;
+	frame4.texture = frameTex;
+	painting5.texture = paintingTex5;
+	frame5.texture = frameTex;
+
+
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
 	transition2.texture = wallTex;
 	parquetry.texture = floorTex;
 	postument.texture = postumentTex;
+	postument2.texture = postumentTex;
 	door.texture = doorTex;
 	door2.texture = doorTex;
 	quitdoor.texture = doorTex;
 	visitor1.texture = visitorTex1;
+	lionLeft.texture = postumentTex;
+	lionLeft.texture_refl = refTex;
+	lionRight.texture = postumentTex;
+	lionRight.texture_refl = refTex;
+	brain.texture = frameTex;
+	brain.texture_refl = refTex;
 }
 
 
