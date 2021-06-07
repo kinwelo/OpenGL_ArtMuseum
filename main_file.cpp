@@ -40,6 +40,9 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "myCube.h"
 #include "myTeapot.h"
 #include "Object3D.h"
+#include <Visitor.h>
+#include <OBJ_Loader.h>
+#include <firstMethodDrawing.h>
 #include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
 #include <RoomMethodDrawing.h>
@@ -52,6 +55,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 //Speed+window parameters
 float speed_x = 0;
 float speed_y = 0;
+float visitor_speed = 1;
 float aspectRatio = 1;
 float walk_speed = 0;
 
@@ -67,33 +71,20 @@ glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
 glm::vec4 sources[2] = {zrSwiatla,zrSwiatla2};
 
-
-
-
 //All Shaders
 ShaderProgram* sp;
 ShaderProgram* sp_l;
 ShaderProgram* sp_main;
-
-
-
-//Odkomentuj, żeby rysować kostkę
-float* vertices = myCubeVertices;
-float* normals = myCubeNormals;
-float* texCoords = myCubeTexCoords;
-int vertexCount = myCubeVertexCount;
-
-
 
 //All models
 MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
 RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
-MainDrawingMethod  painting("assets/paintings/canvas.obj");
-MainDrawingMethod  frame("assets/paintings/frame.obj");
+MainDrawingMethod painting("assets/paintings/canvas.obj");
+MainDrawingMethod frame("assets/paintings/frame.obj");
 RoomMethodDrawing corridor("assets/gallery/corridor.obj");
-RoomMethodDrawing  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+RoomMethodDrawing transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -246,10 +237,8 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 
 	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 300.0f); //Wylicz macierz rzutowania
 	glm::mat4 M = glm::mat4(1.0f);
-
 	
 	allDrawInOnePlace(P, V, M);
-
 
 	glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
