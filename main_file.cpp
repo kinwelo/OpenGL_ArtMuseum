@@ -35,6 +35,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "myTeapot.h"
 #include "tt.h"
 #include "Object3D.h"
+#include <Visitor.h>
 #include <OBJ_Loader.h>
 #include <firstMethodDrawing.h>
 #include <SecondMethodDrawing.h>
@@ -44,6 +45,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 float speed_x = 0;
 float speed_y = 0;
+float visitor_speed = 1;
 float aspectRatio = 1;
 
 //FPS free fly
@@ -63,36 +65,11 @@ glm::vec3 calcDir(float kat_x, float kat_y) {
 
 ShaderProgram* sp;
 
-
-//Odkomentuj, żeby rysować kostkę
-float* vertices = myCubeVertices;
-float* normals = myCubeNormals;
-float* texCoords = myCubeTexCoords;
-int vertexCount = myCubeVertexCount;
-
-
-
-
-////Odkomentuj, żeby rysować czajnik
-//float* vertices = myTeapotVertices;
-///* float* normals = myTeapotNormals;
-//float* normals = myTeapotVertexNormals;//w tej formie mozna czesto wyeksportowac wektory normalnie w blenderze
-//float* texCoords = myTeapotTexCoords;
-//float* colors = myTeapotColors;
-////int vertexCount = myTeapotVertexCount;
-//
-
-//Test na konsultacje model.obj proba przerobienia na odpowiednie tablice
-
-//float* vertices = myVerts1;
-//float* normals = myVertNormals1;
-//float* texCoords = mytexCoords1;
-//int vertexCount =VertCount1;
-
 GLuint tex0;
 
-SecondMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
+FirstMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
 	cer("assets/cer/cer.obj");
+Visitor blackBearLive(&blackBear, 0.0f, 0.0f, 0.0f, 0.1f);
 
 GLuint readTexture(const char* filename) {
 	GLuint tex;
@@ -198,7 +175,8 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 	glm::vec4 zrSwiatla = glm::vec4(0, 20, -20, 1);
 	glm::mat4 M = glm::mat4(1.0f);
 
-	blackBear.drawModel(sp, P, V, M, zrSwiatla, 0.0f, 1.0f, -3.0f, 180.0f);
+	blackBearLive.moveTo(20.0f, 0.0f, 5.0f, visitor_speed, sp, P, V, M, zrSwiatla, 180.0f);
+	//blackBear.drawModel(sp, P, V, M, zrSwiatla, 0.0f, 1.0f, -3.0f, 180.0f);
 	cer.drawModel(sp, P, V, M, zrSwiatla, -10.0f, 0.0f, -5.0f, 50.0f);
 
 	glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
