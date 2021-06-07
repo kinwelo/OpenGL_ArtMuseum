@@ -89,21 +89,26 @@ int vertexCount = myCubeVertexCount;
 //All models
 MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
-RoomDrawingMethod room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
+RoomDrawingMethod room("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
+//Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
-MainDrawingMethod  painting2("assets/paintings/canvas.obj"), frame2("assets/paintings/frame.obj");
-MainDrawingMethod  painting3("assets/paintings/canvas.obj"), frame3("assets/paintings/frame.obj");
-MainDrawingMethod  painting4("assets/paintings/canvas.obj"), frame4("assets/paintings/frame.obj");
-MainDrawingMethod  painting5("assets/paintings/canvas.obj"), frame5("assets/paintings/frame.obj");
+MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/paintings/canvas.obj");
+MainDrawingMethod  painting3("assets/paintings/canvas.obj");
+MainDrawingMethod  painting4("assets/paintings/canvas.obj");
+MainDrawingMethod  painting5("assets/paintings/canvas.obj");
+//Room2
+MainDrawingMethod  painting2_1("assets/paintings/canvas.obj"), painting2_2("assets/paintings/canvas.obj");
 
 RoomDrawingMethod corridor("assets/gallery/corridor.obj");
-RoomDrawingMethod  transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+RoomDrawingMethod  transition("assets/gallery/transition.obj");
 MainDrawingMethod parquetry("assets/paintings/canvas.obj");
-MainDrawingMethod postument("assets/gallery/postument.obj"), postument2("assets/gallery/postument.obj");
-MainDrawingMethod door("assets/gallery/door.obj"), door2("assets/gallery/door.obj"),quitdoor("assets/gallery/door.obj");
+MainDrawingMethod postument("assets/gallery/postument.obj");
+MainDrawingMethod door("assets/gallery/door.obj");
 MainDrawingMethod visitor1("assets/scene/character.obj");
-LionDrawingMethod lionLeft("assets/statues/lion.obj"), lionRight("assets/statues/lion.obj"), brain("assets/statues/brain.obj");//brain uses lion because same rotations = no more redundant code
+LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj")
+, frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj");
+//brain uses lion because same rotations = no more redundant code
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -181,16 +186,16 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Museum parts+scene
 	room.drawModel(sp_l, P, V, M, sources, 3.0f, 1.0f, -15.0f, 180.0f, 0.002f, 0.0045f, 0.004f);
-	room2ndpart.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.0045f, 0.003f);
+	room.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.0045f, 0.003f);
 	sky.drawModel(sp_l, P, V, M, sources, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
 	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.47f, 0.5f);
 	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
-	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
+	transition.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
 	parquetry.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f,25.0f, 0.0f, 12.0f, 0.1f, 80.7f);
 	door.drawModel(sp_l, P, V, M, sources, -3.6f, 1.05f, -14.90f, 0.0f, 0.0071f, 0.0071f, 0.0071f);
-	door2.drawModel(sp_l, P, V, M, sources, -2.47f, 1.05f, -14.965f, -180.0f, 0.0071f, 0.0071f, 0.0071f);
-	quitdoor.drawModel(sp_l, P, V, M, sources, 2.95f, 1.05f, 55.0f, 270.0f, 0.0071f, 0.0071f, 0.0071f);
-
+	door.drawModel(sp_l, P, V, M, sources, -2.47f, 1.05f, -14.965f, -180.0f, 0.0071f, 0.0071f, 0.0071f);
+	door.drawModel(sp_l, P, V, M, sources, 2.95f, 1.05f, 55.0f, 270.0f, 0.0071f, 0.0071f, 0.0071f);
+	exitSign.drawModel(sp_l, P, V, M, sources, 2.98f, 2.7f, 53.6f, 270.0f, 0.7f,0.7f, 0.003f);
 	//Visitors with simple "AI"
 	visitor1.drawModel(sp_l, P, V, M, sources, 0.0f, 1.0f, -10.0f, 20.0f, 0.13f, 0.13f, 0.13f);
 
@@ -200,11 +205,11 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, -5.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 	//Statue2Room1
 	brain.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 0.0f,90.0f, 0.035f, 0.035f, 0.035f);
-	postument2.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 0.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 0.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 	
 	//Statue1Room2
-	lionLeft.drawModel(sp_envmap, P, V, M, sources, 1.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
-	lionRight.drawModel(sp_envmap, P, V, M, sources, -7.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
+	lion.drawModel(sp_envmap, P, V, M, sources, 1.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
+	lion.drawModel(sp_envmap, P, V, M, sources, -7.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
 
 	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
 	
@@ -214,16 +219,22 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -10.0f, 90.0f, 0.5f, 0.5f, 0.5f);
 	//Painting2Room1
 	painting2.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -6.0f, 90.0f, 1.4f, 1.4f, 0.003f);
-	frame2.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -6.0f, 90.0f, 0.7f, 0.7f, 0.7f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -6.0f, 90.0f, 0.7f, 0.7f, 0.7f);
 	//Painting3Room1
 	painting3.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -2.0f, 90.0f, 1.0f, 1.0f, 0.003f);
-	frame3.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -2.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -2.0f, 90.0f, 0.5f, 0.5f, 0.5f);
 	//Painting4Room1
 	painting4.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, -8.0f, 270.0f, 2.6f, 1.5f, 0.003f);
-	frame4.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -8.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -8.0f, 270.0f, 1.2f, 0.7f, 0.7f);
 	//Painting5Room1
 	painting5.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, -2.0f, 270.0f, 2.6f, 1.5f, 0.003f);
-	frame5.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -2.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -2.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+	//Painting1Room2
+	painting2_1.drawModel(sp_l, P, V, M, sources, 2.77f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
+	frameB.drawModel(sp_main, P, V, M, sources, 2.8f, 1.4f, 11.0f, -90.0f, 0.19f, 0.17f, 0.1f);
+	//Painting2Room2
+	painting2_2.drawModel(sp_l, P, V, M, sources, -8.87f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
+	frameB.drawModel(sp_main, P, V, M, sources, -8.9f, 1.4f, 11.0f, 90.0f, 0.19f, 0.17f, 0.1f);
 
 }
 
@@ -249,12 +260,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint paintingTex3 = readTexture("assets/paintings/patterns/abstract2.png");
 	GLuint paintingTex4 = readTexture("assets/paintings/patterns/abstract3.png");
 	GLuint paintingTex5 = readTexture("assets/paintings/patterns/abstract4.png");
+	GLuint paintingTex2_1 = readTexture("assets/paintings/patterns/animal2.png");
+	GLuint paintingTex2_2 = readTexture("assets/paintings/patterns/animal1.png");
 
 	GLuint floorTex = readTexture("assets/materials/floor.png");
 	GLuint refTex = readTexture("assets/materials/sky.png");
 	GLuint frameTex = readTexture("assets/paintings/patterns/goldframe.png");
+	GLuint fancyframeTex = readTexture("assets/materials/fancyframeDiffuse.png");
 	GLuint postumentTex = readTexture("assets/materials/pedestal.png");
 	GLuint doorTex = readTexture("assets/materials/door.png");
+	GLuint signTex = readTexture("assets/materials/sign.png");
 
 	GLuint visitorTex1 = readTexture("assets/materials/skins/skin1.png");
 	GLuint visitorTex2 = readTexture("assets/materials/skins/skin2.png");
@@ -266,37 +281,32 @@ void initOpenGLProgram(GLFWwindow* window) {
 	cer.texture = steelTex;
 	//cer.texture_refl = refTex;
 	room.texture = wallTex;
-	room2ndpart.texture = wallTex;
+	//room2ndpart.texture = wallTex;
 	sky.texture = skyTex;
-
+	//Room1
 	painting.texture = paintingTex1;
 	frame.texture = frameTex;
 	painting2.texture = paintingTex2;
-	frame2.texture = frameTex;
 	painting3.texture = paintingTex3;
-	frame3.texture = frameTex;
 	painting4.texture = paintingTex4;
-	frame4.texture = frameTex;
 	painting5.texture = paintingTex5;
-	frame5.texture = frameTex;
-
+	//Room2
+	painting2_1.texture = paintingTex2_1;
+	frameB.texture = fancyframeTex;
+	painting2_2.texture = paintingTex2_2;
+	frameB2.texture = fancyframeTex;
 
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
-	transition2.texture = wallTex;
 	parquetry.texture = floorTex;
 	postument.texture = postumentTex;
-	postument2.texture = postumentTex;
 	door.texture = doorTex;
-	door2.texture = doorTex;
-	quitdoor.texture = doorTex;
 	visitor1.texture = visitorTex1;
-	lionLeft.texture = postumentTex;
-	lionLeft.texture_refl = refTex;
-	lionRight.texture = postumentTex;
-	lionRight.texture_refl = refTex;
+	lion.texture = postumentTex;
+	lion.texture_refl = refTex;
 	brain.texture = frameTex;
 	brain.texture_refl = refTex;
+	exitSign.texture = signTex;
 }
 
 
