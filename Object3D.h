@@ -11,10 +11,14 @@
 #include "shaderprogram.h"
 #include "myCube.h"
 #include "myTeapot.h"
-#include "tt.h"
 #include "Object3D.h"
-#include <OBJ_Loader.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <fstream>
 
+// Math.h - STD math Library
+#include <math.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -55,8 +59,6 @@ private:
 			aiVector3D normal = mesh->mNormals[i];
 			norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));
 
-			//zalozenie ze mamy tylko zerowy zestaw tekstur(tylko 2d) 47 min co gdy nie
-
 			aiVector3D texCoord = mesh->mTextureCoords[0][i];
 			textureCoords.push_back(glm::vec2(texCoord.x, texCoord.y));
 
@@ -72,6 +74,8 @@ private:
 
 	}
 
+
+	
 public:
 	/*
 		P, V, M, lightSource - parametry programu cieniuj¹cego,
@@ -84,11 +88,14 @@ public:
 		glm::mat4 P,
 		glm::mat4 V,
 		glm::mat4 M,
-		glm::vec4 lightSource,
+		glm::vec4 lightSource[],
 		float xAxis,
 		float yAxis,
 		float zAxis,
-		float rotate
+		float rotate,
+		float xScale,
+		float yScale,
+		float zScale
 	) = 0;
 
 };

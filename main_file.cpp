@@ -1,5 +1,11 @@
 
 /*
+Projekt Zaliczeniowy Grafika Komputerowa i Wizualizacja 2021
+Mateusz Olewnik i Mariusz Nowak
+Prowadzący: dr inż. Witold Andrzejewski 
+*/
+
+/*
 Niniejszy program jest wolnym oprogramowaniem; możesz go
 rozprowadzać dalej i / lub modyfikować na warunkach Powszechnej
 Licencji Publicznej GNU, wydanej przez Fundację Wolnego
@@ -33,26 +39,53 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "shaderprogram.h"
 #include "myCube.h"
 #include "myTeapot.h"
-#include "tt.h"
 #include "Object3D.h"
 #include <Visitor.h>
 #include <OBJ_Loader.h>
 #include <firstMethodDrawing.h>
+#include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
+#include <RoomMethodDrawing.h>
+#include <SkyDrawingMethod.h>
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
 
+
+//Speed+window parameters
 float speed_x = 0;
 float speed_y = 0;
 float visitor_speed = 1;
 float aspectRatio = 1;
+float walk_speed = 0;
 
 //FPS free fly
 //WASD - obroty kamerą
 //Strzalka gora dol = latanie do przodu/tylu
-glm::vec3 pos = glm::vec3(0, 2, -15);
-float walk_speed = 0;
+
+//Polozenie poczatkowe: pozycja gracza i źródeł światła
+glm::vec3 pos = glm::vec3(0, 2.5,0);
+glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, 0, 1);
+glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
+glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
+//glm::vec4 zrSwiatla = glm::vec4(pos, 1);
+glm::vec4 sources[2] = {zrSwiatla,zrSwiatla2};
+
+//All Shaders
+ShaderProgram* sp;
+ShaderProgram* sp_l;
+ShaderProgram* sp_main;
+
+//All models
+MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
+MainDrawingMethod cer("assets/statues/cer.obj");
+RoomMethodDrawing room("assets/gallery/Museum.obj"), room2ndpart("assets/gallery/Museum.obj");
+SkyDrawingMethod sky("assets/scene/Egg.obj");
+MainDrawingMethod painting("assets/paintings/canvas.obj");
+MainDrawingMethod frame("assets/paintings/frame.obj");
+RoomMethodDrawing corridor("assets/gallery/corridor.obj");
+RoomMethodDrawing transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -61,15 +94,6 @@ glm::vec3 calcDir(float kat_x, float kat_y) {
 	dir = M * dir;
 	return glm::vec3(dir); //wlasnosc wektora 3 liczbowego ucina wspolrzedne w z czteroliczbowych
 }
-
-
-ShaderProgram* sp;
-
-GLuint tex0;
-
-FirstMethodDrawing blackBear("assets/BlackBear/BlackBear.obj"),
-	cer("assets/cer/cer.obj");
-Visitor blackBearLive(&blackBear, 0.0f, 0.0f, 0.0f, 0.1f);
 
 GLuint readTexture(const char* filename) {
 	GLuint tex;
@@ -106,8 +130,8 @@ void keyCallback(
 		if (key == GLFW_KEY_D) speed_y = -1;
 		if (key == GLFW_KEY_S) speed_x = 1;
 		if (key == GLFW_KEY_W) speed_x = -1;
-		if (key == GLFW_KEY_UP) walk_speed = 2;
-		if (key == GLFW_KEY_DOWN) walk_speed = -2;
+		if (key == GLFW_KEY_UP) walk_speed = 10;
+		if (key == GLFW_KEY_DOWN) walk_speed = -10;
 
 	}
 	if (action == GLFW_RELEASE) {
@@ -135,6 +159,27 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 
+void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
+	//Museum parts+scene
+	room.drawModel(sp_l, P, V, M, sources, 3.0f, 1.0f, -15.0f, 180.0f, 0.002f, 0.0045f, 0.004f);
+	room2ndpart.drawModel(sp_l, P, V, M, sources, -9.0f, 1.0f, 58.0f, 360.0f, 0.002f, 0.0045f, 0.003f);
+	sky.drawModel(sp_l, P, V, M, sources, -3.0f, -40.0f, 20.0f, 360.0f, 1.0f, 1.6, 1.6);
+	corridor.drawModel(sp_main, P, V, M, sources, -3.0f, 1.0f, 26.5f, 0.0f, 0.51f, 0.47f, 0.5f);
+	transition.drawModel(sp_l, P, V, M, sources,-8.4f, 3.25f, 4.9f, -90.0f, 0.6f, 0.34f,0.36f);
+	transition2.drawModel(sp_l, P, V, M, sources, 2.4f, 3.25f, 43.0f, 90.0f, 0.6f, 0.34f, 0.36f);
+
+	//Museum statues
+	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
+	cer.drawModel(sp_main, P, V, M, sources, -7.0f, 1.0f, 10.0f, 50.0f, 0.3f, 0.3f, 0.3f);
+	
+	//Museum paintings+frames
+	painting.drawModel(sp_main, P, V, M, sources, 2.68f, 2.5f, 7.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 2.5f, 7.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+
+	
+}
+
+
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
@@ -144,10 +189,27 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window, keyCallback);
 
 	sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
+	sp_l = new ShaderProgram("v_lambert.glsl", NULL, "f_lambert.glsl");
+	sp_main = new ShaderProgram("v_manysources.glsl", NULL, "f_manysources.glsl");
+
 	GLuint steelTex = readTexture("assets/materials/steel.png");
+	GLuint wallTex = readTexture("assets/materials/wallwhite.png");
+	GLuint skyTex = readTexture("assets/materials/clearsky.png");
+	GLuint paintingTex1 = readTexture("assets/paintings/patterns/test.png");
+
+
 	blackBear.texture = steelTex;
 	cer.texture = steelTex;
+	room.texture = wallTex;
+	room2ndpart.texture = wallTex;
+	sky.texture = skyTex;
+	painting.texture = paintingTex1;
+	frame.texture = steelTex;
+	corridor.texture = wallTex;
+	transition.texture = wallTex;
+	transition2.texture = wallTex;
 }
+
 
 
 //Zwolnienie zasobów zajętych przez program
@@ -155,6 +217,8 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
 
 	delete sp;
+	delete sp_l;
+	delete sp_main;
 }
 
 
@@ -171,13 +235,10 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 		//glm::vec3(0, 0, 0),
 		//glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 
-	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
-	glm::vec4 zrSwiatla = glm::vec4(0, 20, -20, 1);
+	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 300.0f); //Wylicz macierz rzutowania
 	glm::mat4 M = glm::mat4(1.0f);
-
-	blackBearLive.moveTo(20.0f, 0.0f, 5.0f, visitor_speed, sp, P, V, M, zrSwiatla, 180.0f);
-	//blackBear.drawModel(sp, P, V, M, zrSwiatla, 0.0f, 1.0f, -3.0f, 180.0f);
-	cer.drawModel(sp, P, V, M, zrSwiatla, -10.0f, 0.0f, -5.0f, 50.0f);
+	
+	allDrawInOnePlace(P, V, M);
 
 	glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
@@ -185,9 +246,7 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 
 int main(void)
 {
-	//objl::Loader Loader;
-	//// Load .obj File
-	//bool loadout = Loader.LoadFile("model.obj");
+	
 
 	GLFWwindow* window; //Wskaźnik na obiekt reprezentujący okno
 
@@ -198,7 +257,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+	window = glfwCreateWindow(1000, 1000, "Art Museum", NULL, NULL);  //Utwórz okno  i kontekst OpenGL.
 
 	if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
 	{
@@ -226,14 +285,13 @@ int main(void)
 	glfwSetTime(0); //Zeruj timer
 	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
 	{
-		//angle_x += speed_x * glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
-		//angle_y += speed_y * glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
+		
 		kat_x += speed_x * glfwGetTime();
 		kat_y += speed_y * glfwGetTime();
 		pos += (float)(walk_speed * glfwGetTime()) * calcDir(kat_x, kat_y);//wylaczenie latania: zamiast katu X dac 0
 		glfwSetTime(0); //Zeruj timer
 		drawScene(window, kat_x, kat_y);
-//drawScene(window, angle_x, angle_y); //Wykonaj procedurę rysującą
+
 		glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
 	}
 
