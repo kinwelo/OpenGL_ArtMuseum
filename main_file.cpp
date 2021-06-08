@@ -41,6 +41,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "myTeapot.h"
 #include "Object3D.h"
 #include <Visitor.h>
+#include <Exhibit.h>
 #include <OBJ_Loader.h>
 #include <firstMethodDrawing.h>
 #include <MainDrawingMethod.h>
@@ -50,6 +51,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
+#include <time.h>
 
 
 //Speed+window parameters
@@ -58,6 +60,7 @@ float speed_y = 0;
 float visitor_speed = 1;
 float aspectRatio = 1;
 float walk_speed = 0;
+int * bussyObj;
 
 //FPS free fly
 //WASD - obroty kamerą
@@ -85,6 +88,12 @@ MainDrawingMethod painting("assets/paintings/canvas.obj");
 MainDrawingMethod frame("assets/paintings/frame.obj");
 RoomMethodDrawing corridor("assets/gallery/corridor.obj");
 RoomMethodDrawing transition("assets/gallery/transition.obj"), transition2("assets/gallery/transition.obj");
+
+Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
+Exhibit exhibitions[] = {
+	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
+	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
+};
 
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
@@ -176,7 +185,11 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	painting.drawModel(sp_main, P, V, M, sources, 2.68f, 2.5f, 7.0f, 90.0f, 1.0f, 1.0f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 2.5f, 7.0f, 90.0f, 0.5f, 0.5f, 0.5f);
 
-	
+	bussyObj = blackBearVisitor.moveTo(
+		visitor_speed,
+		sp_main, P, V, M, sources,
+		0.1, 0.1, 0.1, exhibitions, 2);
+	exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
 }
 
 
@@ -222,8 +235,6 @@ void freeOpenGLProgram(GLFWwindow* window) {
 }
 
 
-
-
 //Procedura rysująca zawartość sceny
 void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 	//Kat x - kat gora gol jak podnosimy glowe ,kat y - jak skrecimy glowe lewo prawo
@@ -249,6 +260,7 @@ int main(void)
 	
 
 	GLFWwindow* window; //Wskaźnik na obiekt reprezentujący okno
+	srand(time(NULL));
 
 	glfwSetErrorCallback(error_callback);//Zarejestruj procedurę obsługi błędów
 
