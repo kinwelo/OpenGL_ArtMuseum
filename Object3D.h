@@ -10,7 +10,6 @@
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "myCube.h"
-#include "myTeapot.h"
 #include "Object3D.h"
 #include <iostream>
 #include <vector>
@@ -36,6 +35,7 @@ protected:
 
 public:
 	GLuint texture;
+	GLuint texture_refl;//only for special purposes like: enivorment mapping
 
 	/*
 		plik - œcie¿ka do pliku obiektu 3D
