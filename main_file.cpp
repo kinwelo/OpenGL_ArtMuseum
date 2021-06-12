@@ -39,6 +39,9 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "shaderprogram.h"
 #include "myCube.h"
 #include "Object3D.h"
+#include <Visitor.h>
+#include <OBJ_Loader.h>
+#include <firstMethodDrawing.h>
 #include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
 #include <RoomDrawingMethod.h>
@@ -53,6 +56,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 //Speed+window parameters
 float speed_x = 0;
 float speed_y = 0;
+float visitor_speed = 1;
 float aspectRatio = 1;
 float walk_speed = 0;
 
@@ -68,29 +72,18 @@ glm::vec4 zrSwiatla3 = glm::vec4(-2.0f, 2.0f, 29.0f, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
 glm::vec4 sources[3] = {zrSwiatla,zrSwiatla2,zrSwiatla3};
 
-
-
-
 //All Shaders
 ShaderProgram* sp;
 ShaderProgram* sp_l;
 ShaderProgram* sp_main;
 ShaderProgram* sp_envmap;
 
-
-//Odkomentuj, żeby rysować kostkę
-float* vertices = myCubeVertices;
-float* normals = myCubeNormals;
-float* texCoords = myCubeTexCoords;
-int vertexCount = myCubeVertexCount;
-
-
-
 //All models
 MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
 RoomDrawingMethod room("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
+
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
 MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/paintings/canvas.obj");
@@ -106,10 +99,8 @@ MainDrawingMethod parquetry("assets/paintings/canvas.obj");
 MainDrawingMethod postument("assets/gallery/postument.obj");
 MainDrawingMethod door("assets/gallery/door.obj");
 MainDrawingMethod visitor1("assets/scene/character.obj");
-LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj")
-, frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj");
-//brain uses lion because same rotations = no more redundant code
-
+LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"), 
+  frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj");
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -173,9 +164,6 @@ void error_callback(int error, const char* description) {
 	fputs(description, stderr);
 }
 
-
-
-
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
 	if (height == 0) return;
 	aspectRatio = (float)width / (float)height;
@@ -235,9 +223,7 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Painting2Room2
 	painting2_2.drawModel(sp_l, P, V, M, sources, -8.87f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
 	frameB.drawModel(sp_main, P, V, M, sources, -8.9f, 1.4f, 11.0f, 90.0f, 0.19f, 0.17f, 0.1f);
-
 }
-
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
@@ -309,22 +295,14 @@ void initOpenGLProgram(GLFWwindow* window) {
 	exitSign.texture = signTex;
 }
 
-
-
 //Zwolnienie zasobów zajętych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
-
 	delete sp;
 	delete sp_l;
 	delete sp_main;
 	delete sp_envmap;
-
-	
 }
-
-
-
 
 //Procedura rysująca zawartość sceny
 void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
@@ -333,16 +311,11 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V = glm::lookAt(pos, pos + calcDir(kat_x, kat_y), glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
-		//glm::vec3(0, 0, -10),//na z oddalanie od obiektu
-		//glm::vec3(0, 0, 0),
-		//glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 
 	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.01f, 300.0f); //Wylicz macierz rzutowania
 	glm::mat4 M = glm::mat4(1.0f);
-
 	
 	allDrawInOnePlace(P, V, M);
-
 
 	glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
@@ -350,8 +323,6 @@ void drawScene(GLFWwindow* window, float kat_x, float kat_y) {
 
 int main(void)
 {
-	
-
 	GLFWwindow* window; //Wskaźnik na obiekt reprezentujący okno
 
 	glfwSetErrorCallback(error_callback);//Zarejestruj procedurę obsługi błędów
@@ -384,8 +355,6 @@ int main(void)
 	float angle = 0; //zadeklaruj zmienną przechowującą aktualny kąt obrotu
 	float kat_x = 0;
 	float kat_y = 0;
-	//float angle_x = 0; //Aktualny kąt obrotu obiektu
-	//float angle_y = 0; //Aktualny kąt obrotu obiektu
 	glfwSetTime(0); //Zeruj timer
 	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
 	{
