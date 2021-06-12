@@ -36,7 +36,6 @@ public:
 		glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
 		glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
 
-
 		glUniform4fv(sp->u("lp[0]"), 1, glm::value_ptr(lightSource[0]));
 		glUniform4fv(sp->u("lp[1]"), 1, glm::value_ptr(lightSource[1]));
 
