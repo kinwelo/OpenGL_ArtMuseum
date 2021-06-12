@@ -64,9 +64,9 @@ float walk_speed = 0;
 glm::vec3 pos = glm::vec3(-4, 2.8,-11);
 glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, -10, 1);
 glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
-glm::vec4 zrSwiatla3 = glm::vec4(-2.4f, 1.0f, 27.0f, 1);
+glm::vec4 zrSwiatla3 = glm::vec4(-2.0f, 2.0f, 29.0f, 1);
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
-glm::vec4 sources[2] = {zrSwiatla,zrSwiatla2};
+glm::vec4 sources[3] = {zrSwiatla,zrSwiatla2,zrSwiatla3};
 
 
 
@@ -319,6 +319,8 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	delete sp_l;
 	delete sp_main;
 	delete sp_envmap;
+
+	
 }
 
 
