@@ -41,7 +41,6 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Object3D.h"
 #include <Visitor.h>
 #include <Exhibit.h>
-#include <OBJ_Loader.h>
 #include <firstMethodDrawing.h>
 #include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
@@ -71,7 +70,7 @@ int * bussyObj;
 glm::vec3 pos = glm::vec3(-4, 2.8,-11);
 glm::vec4 zrSwiatla = glm::vec4(-4, 3.0, -10, 1);
 glm::vec4 zrSwiatla2 = glm::vec4(-4, 3.0, 50, 1);
-glm::vec4 zrSwiatla3 = glm::vec4(-2.0f, 2.0f, 29.0f, 1);
+glm::vec4 zrSwiatla3 = glm::vec4(-1.0f, 3.0f, 12.9f, 1); 
 //glm::vec4 zrSwiatla = glm::vec4(pos, 1);
 glm::vec4 sources[3] = {zrSwiatla,zrSwiatla2,zrSwiatla3};
 
@@ -86,13 +85,10 @@ MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
 RoomDrawingMethod room("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
-
-
-Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
-Exhibit exhibitions[] = {
-	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
-	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
-};
+MainDrawingMethod monke("assets/statues/monke.obj");
+MainDrawingMethod dino("assets/statues/dino.obj");
+MainDrawingMethod cube("assets/paintings/canvas.obj");
+MainDrawingMethod dog("assets/statues/doge.obj");
 
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
@@ -100,8 +96,11 @@ MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/pa
 MainDrawingMethod  painting3("assets/paintings/canvas.obj");
 MainDrawingMethod  painting4("assets/paintings/canvas.obj");
 MainDrawingMethod  painting5("assets/paintings/canvas.obj");
+
+
 //Room2
 MainDrawingMethod  painting2_1("assets/paintings/canvas.obj"), painting2_2("assets/paintings/canvas.obj");
+
 
 RoomDrawingMethod corridor("assets/gallery/corridor.obj");
 RoomDrawingMethod  transition("assets/gallery/transition.obj");
@@ -111,6 +110,13 @@ MainDrawingMethod door("assets/gallery/door.obj");
 MainDrawingMethod visitor1("assets/scene/character.obj");
 LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"), 
   frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj");
+
+Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
+Exhibit exhibitions[] = {
+	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
+	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
+};
+
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -205,15 +211,21 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	brain.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 0.0f,90.0f, 0.035f, 0.035f, 0.035f);
 	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 0.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 	
-	//Statue1Room2
+	//Statue1%2Room2
 	lion.drawModel(sp_envmap, P, V, M, sources, 1.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
 	lion.drawModel(sp_envmap, P, V, M, sources, -7.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
-
-	blackBear.drawModel(sp_main, P, V, M, sources, -2.4f, 1.0f, 27.0f, 180.0f, 0.1f, 0.1f, 0.1f);
-	
-	//Museum paintings+frames
-
-	
+	//Statue3Room2
+	monke.drawModel(sp_l, P, V, M, sources, -7.1f, 2.7f, 21.8f, 170.0f, 0.013f,0.016f, 0.013f);
+	cube.drawModel(sp_l, P, V, M, sources, -7.1f, 1.1f, 22.0f, 170.0f, 1.8f, 0.8f, 1.8f);
+	//Statue4Room2
+	dino.drawModel(sp_l, P, V, M, sources, 1.2f, 2.9f, 21.9f, 190.0f, 0.012f, 0.012f, 0.012f);
+	cube.drawModel(sp_l, P, V, M, sources, 1.2f, 1.1f, 21.6f, 190.0f, 1.8f, 0.8f, 1.8f);
+	//Statue5Room2
+	blackBear.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 16.0f, 100.0f, 0.07f, 0.07f, 0.07f);
+	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 16.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	//Statue6Room2
+	dog.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 13.0f, 240.0f, 0.004f, 0.004f, 0.004f);
+	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 13.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 
 	//Painting1Room1
 	painting.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -10.0f, 90.0f, 1.0f, 1.0f, 0.003f);
@@ -237,11 +249,11 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	painting2_2.drawModel(sp_l, P, V, M, sources, -8.87f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
 	frameB.drawModel(sp_main, P, V, M, sources, -8.9f, 1.4f, 11.0f, 90.0f, 0.19f, 0.17f, 0.1f);
   
-  bussyObj = blackBearVisitor.moveTo(
+ /* bussyObj = blackBearVisitor.moveTo(
 		visitor_speed,
 		sp_main, P, V, M, sources,
 		0.1, 0.1, 0.1, exhibitions, 2);
-	exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
+	exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);*/
 }
 
 //Procedura inicjująca
@@ -271,18 +283,23 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint floorTex = readTexture("assets/materials/floor.png");
 	GLuint refTex = readTexture("assets/materials/sky.png");
 	GLuint frameTex = readTexture("assets/paintings/patterns/goldframe.png");
+	GLuint bronzeTex = readTexture("assets/materials/bronze_homemade.png");
 	GLuint fancyframeTex = readTexture("assets/materials/fancyframeDiffuse.png");
 	GLuint postumentTex = readTexture("assets/materials/pedestal.png");
 	GLuint doorTex = readTexture("assets/materials/door.png");
 	GLuint signTex = readTexture("assets/materials/sign.png");
+	GLuint monkeTex = readTexture("assets/materials/monkey.png");
+	GLuint tyranosaurusTex = readTexture("assets/materials/dino.png"); // :)
 
+	
 	GLuint visitorTex1 = readTexture("assets/materials/skins/skin1.png");
 	GLuint visitorTex2 = readTexture("assets/materials/skins/skin2.png");
 	GLuint visitorTex3 = readTexture("assets/materials/skins/skin5.png");
 	GLuint visitorTex4 = readTexture("assets/materials/skins/skin6.png");
 
 
-	blackBear.texture = steelTex;
+	blackBear.texture = bronzeTex;
+	dog.texture = bronzeTex;
 	cer.texture = steelTex;
 	//cer.texture_refl = refTex;
 	room.texture = wallTex;
@@ -305,13 +322,17 @@ void initOpenGLProgram(GLFWwindow* window) {
 	transition.texture = wallTex;
 	parquetry.texture = floorTex;
 	postument.texture = postumentTex;
+	cube.texture = postumentTex;
 	door.texture = doorTex;
 	visitor1.texture = visitorTex1;
 	lion.texture = postumentTex;
 	lion.texture_refl = refTex;
 	brain.texture = frameTex;
+	
 	brain.texture_refl = refTex;
 	exitSign.texture = signTex;
+	monke.texture = monkeTex;
+	dino.texture = tyranosaurusTex;
 }
 
 //Zwolnienie zasobów zajętych przez program
