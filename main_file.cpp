@@ -90,6 +90,7 @@ MainDrawingMethod dino("assets/statues/dino.obj");
 MainDrawingMethod cube("assets/paintings/canvas.obj");
 MainDrawingMethod dog("assets/statues/doge.obj");
 
+
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
 MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/paintings/canvas.obj");
@@ -97,11 +98,18 @@ MainDrawingMethod  painting3("assets/paintings/canvas.obj");
 MainDrawingMethod  painting4("assets/paintings/canvas.obj");
 MainDrawingMethod  painting5("assets/paintings/canvas.obj");
 
-
 //Room2
 MainDrawingMethod  painting2_1("assets/paintings/canvas.obj"), painting2_2("assets/paintings/canvas.obj");
 
+//Room3
+MainDrawingMethod  painting3_1("assets/paintings/canvas.obj");
+MainDrawingMethod  painting3_2("assets/paintings/canvas.obj");
+MainDrawingMethod  painting3_3("assets/paintings/canvas.obj");
+MainDrawingMethod  painting3_4("assets/paintings/canvas.obj");
+MainDrawingMethod  painting3_5("assets/paintings/canvas.obj");
 
+
+MainDrawingMethod coliseum("assets/statues/minikoloseum.obj");
 RoomDrawingMethod corridor("assets/gallery/corridor.obj");
 RoomDrawingMethod  transition("assets/gallery/transition.obj");
 MainDrawingMethod parquetry("assets/paintings/canvas.obj");
@@ -109,7 +117,8 @@ MainDrawingMethod postument("assets/gallery/postument.obj");
 MainDrawingMethod door("assets/gallery/door.obj");
 MainDrawingMethod visitor1("assets/scene/character.obj");
 LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"), 
-  frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj");
+  frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj"),
+	statue1("assets/statues/classicStatue.obj"),thinker("assets/statues/thinker.obj");
 
 Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
 Exhibit exhibitions[] = {
@@ -227,6 +236,13 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	dog.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 13.0f, 240.0f, 0.004f, 0.004f, 0.004f);
 	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 13.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 
+	//Statue1Room3
+	coliseum.drawModel(sp_l, P, V, M, sources, -3.0f, 2.0f, 37.0f, 0.0f, 0.0009f, 0.0009f, 0.0009f);
+	cube.drawModel(sp_l, P, V, M, sources, -3.0f, 1.1f, 37.0f, 0.0f, 2.3f, 1.5f, 2.3f);
+
+	statue1.drawModel(sp_l, P, V, M, sources, 1.7f, 1.1f, 41.0f, 190.0f, 0.015f, 0.015f, 0.015f);
+	thinker.drawModel(sp_l, P, V, M, sources, -8.1f, 1.0f, 41.0f, 140.0f, 0.007f, 0.007f, 0.007f);
+
 	//Painting1Room1
 	painting.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -10.0f, 90.0f, 1.0f, 1.0f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -10.0f, 90.0f, 0.5f, 0.5f, 0.5f);
@@ -242,6 +258,7 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Painting5Room1
 	painting5.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, -2.0f, 270.0f, 2.6f, 1.5f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, -2.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+
 	//Painting1Room2
 	painting2_1.drawModel(sp_l, P, V, M, sources, 2.77f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
 	frameB.drawModel(sp_main, P, V, M, sources, 2.8f, 1.4f, 11.0f, -90.0f, 0.19f, 0.17f, 0.1f);
@@ -249,6 +266,22 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	painting2_2.drawModel(sp_l, P, V, M, sources, -8.87f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
 	frameB.drawModel(sp_main, P, V, M, sources, -8.9f, 1.4f, 11.0f, 90.0f, 0.19f, 0.17f, 0.1f);
   
+	//Painting1Room3
+	painting3_1.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, 31.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, 31.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+	//Painting2Room3
+	painting3_2.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, 35.0f, 90.0f, 1.4f, 1.4f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, 35.0f, 90.0f, 0.7f, 0.7f, 0.7f);
+	//Painting3Room3
+	painting3_3.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, 39.0f, 90.0f, 1.0f, 1.0f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, 39.0f, 90.0f, 0.5f, 0.5f, 0.5f);
+	//Painting4Room3
+	painting3_4.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, 33.0f, 270.0f, 2.6f, 1.5f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, 33.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+	//Painting5Room3
+	painting3_5.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, 37.0f, 270.0f, 2.6f, 1.5f, 0.003f);
+	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, 37.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+
  /* bussyObj = blackBearVisitor.moveTo(
 		visitor_speed,
 		sp_main, P, V, M, sources,
@@ -279,6 +312,11 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint paintingTex5 = readTexture("assets/paintings/patterns/abstract4.png");
 	GLuint paintingTex2_1 = readTexture("assets/paintings/patterns/animal2.png");
 	GLuint paintingTex2_2 = readTexture("assets/paintings/patterns/animal1.png");
+	GLuint paintingTex3_1 = readTexture("assets/paintings/patterns/640px-St_Georges_Cathedral_Cape_Town_-_Cape_Colony_1800s_-_watercolour_by_Bowler.png");
+	GLuint paintingTex3_2 = readTexture("assets/paintings/patterns/1024px-Pieter_Brueghel_the_Elder_-_The_Dutch_Proverbs_-_Google_Art_Project.png");
+	GLuint paintingTex3_3 = readTexture("assets/paintings/patterns/Clayton_painting.png");
+	GLuint paintingTex3_4 = readTexture("assets/paintings/patterns/1024px-(ukjent_monogrammist)_V.S._-_Painting_-_NG.M.00141_-_National_Museum_of_Art,_Architecture_and_Design.png");
+	GLuint paintingTex3_5 = readTexture("assets/paintings/patterns/Washington_Crossing_the_Delaware_by_Emanuel_Leutze,_MMA-NYC,_1851.png");
 
 	GLuint floorTex = readTexture("assets/materials/floor.png");
 	GLuint refTex = readTexture("assets/materials/sky.png");
@@ -290,8 +328,10 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint signTex = readTexture("assets/materials/sign.png");
 	GLuint monkeTex = readTexture("assets/materials/monkey.png");
 	GLuint tyranosaurusTex = readTexture("assets/materials/dino.png"); // :)
+	GLuint coliseumTex = readTexture("assets/materials/koloseum.png");
+	GLuint statueTex = readTexture("assets/materials/statue.png");
+	GLuint thinkerTex = readTexture("assets/materials/TheThinker_Diffuse.png");
 
-	
 	GLuint visitorTex1 = readTexture("assets/materials/skins/skin1.png");
 	GLuint visitorTex2 = readTexture("assets/materials/skins/skin2.png");
 	GLuint visitorTex3 = readTexture("assets/materials/skins/skin5.png");
@@ -317,6 +357,12 @@ void initOpenGLProgram(GLFWwindow* window) {
 	frameB.texture = fancyframeTex;
 	painting2_2.texture = paintingTex2_2;
 	frameB2.texture = fancyframeTex;
+	//Room3
+	painting3_1.texture = paintingTex3_1;
+	painting3_2.texture = paintingTex3_2;
+	painting3_3.texture = paintingTex3_3;
+	painting3_4.texture = paintingTex3_4;
+	painting3_5.texture = paintingTex3_5;
 
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
@@ -333,6 +379,9 @@ void initOpenGLProgram(GLFWwindow* window) {
 	exitSign.texture = signTex;
 	monke.texture = monkeTex;
 	dino.texture = tyranosaurusTex;
+	coliseum.texture = coliseumTex;
+	statue1.texture = statueTex;
+	thinker.texture = thinkerTex;
 }
 
 //Zwolnienie zasobów zajętych przez program
