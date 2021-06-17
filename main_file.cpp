@@ -108,6 +108,11 @@ MainDrawingMethod  painting3_3("assets/paintings/canvas.obj");
 MainDrawingMethod  painting3_4("assets/paintings/canvas.obj");
 MainDrawingMethod  painting3_5("assets/paintings/canvas.obj");
 
+//Room4
+MainDrawingMethod  genie("assets/ceramics/genie.obj");
+MainDrawingMethod  jug("assets/ceramics/jug.obj");
+MainDrawingMethod  vase1("assets/ceramics/vase1.obj");
+MainDrawingMethod  vase2("assets/ceramics/vase2.obj");
 
 MainDrawingMethod coliseum("assets/statues/minikoloseum.obj");
 RoomDrawingMethod corridor("assets/gallery/corridor.obj");
@@ -243,6 +248,24 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	statue1.drawModel(sp_l, P, V, M, sources, 1.7f, 1.1f, 41.0f, 190.0f, 0.015f, 0.015f, 0.015f);
 	thinker.drawModel(sp_l, P, V, M, sources, -8.1f, 1.0f, 41.0f, 140.0f, 0.007f, 0.007f, 0.007f);
 
+	//Ceramics1Room4
+	genie.drawModel(sp_main, P, V, M, sources, 1.5f, 1.95f, 46.0f, 0.0f, 0.4f, 0.4f, 0.4f);
+	postument.drawModel(sp_main, P, V, M, sources, 1.5f, 1.1f, 46.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	//Ceramics2Room4
+	jug.drawModel(sp_main, P, V, M, sources, 1.25f, 1.97f, 47.7f, 40.0f, 0.03f, 0.03f, 0.03f);
+	postument.drawModel(sp_main, P, V, M, sources, 1.5f, 1.1f, 48.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	//Ceramics3Room4
+	vase1.drawModel(sp_l, P, V, M, sources, 1.5f, 2.0f, 50.0f, 0.0f, 0.014f, 0.014f, 0.014f);
+	postument.drawModel(sp_main, P, V, M, sources, 1.5f, 1.1f, 50.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	//Ceramics4Room4
+	vase2.drawModel(sp_l, P, V, M, sources, -7.47f, 2.0f, 46.1f, 0.0f, 0.010f, 0.010f, 0.010f);
+	postument.drawModel(sp_main, P, V, M, sources, -7.5f, 1.1f, 46.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+	//Ceramics5Room4
+	postument.drawModel(sp_main, P, V, M, sources, -7.5f, 1.1f, 48.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+
+	//Ceramics6Room4
+	postument.drawModel(sp_main, P, V, M, sources, -7.5f, 1.1f, 50.0f, 0.0f, 0.4f, 0.3f, 0.4f);
+
 	//Painting1Room1
 	painting.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, -10.0f, 90.0f, 1.0f, 1.0f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, -10.0f, 90.0f, 0.5f, 0.5f, 0.5f);
@@ -281,6 +304,8 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Painting5Room3
 	painting3_5.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, 37.0f, 270.0f, 2.6f, 1.5f, 0.003f);
 	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, 37.0f, 270.0f, 1.2f, 0.7f, 0.7f);
+
+
 
  /* bussyObj = blackBearVisitor.moveTo(
 		visitor_speed,
@@ -331,6 +356,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint coliseumTex = readTexture("assets/materials/koloseum.png");
 	GLuint statueTex = readTexture("assets/materials/statue.png");
 	GLuint thinkerTex = readTexture("assets/materials/TheThinker_Diffuse.png");
+	GLuint vaseTex = readTexture("assets/materials/vase1.png");
 
 	GLuint visitorTex1 = readTexture("assets/materials/skins/skin1.png");
 	GLuint visitorTex2 = readTexture("assets/materials/skins/skin2.png");
@@ -363,6 +389,11 @@ void initOpenGLProgram(GLFWwindow* window) {
 	painting3_3.texture = paintingTex3_3;
 	painting3_4.texture = paintingTex3_4;
 	painting3_5.texture = paintingTex3_5;
+	//Room4
+	genie.texture = frameTex;
+	jug.texture = coliseumTex;
+	vase1.texture = vaseTex;
+	vase2.texture = steelTex;
 
 	corridor.texture = wallTex;
 	transition.texture = wallTex;
