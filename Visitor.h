@@ -23,16 +23,16 @@ public:
 		position[1] = position_y;
 		position[2] = position_z;
 		speed = s;
-		waitClk = rand() % 5000 + 1000;
+		waitClk = rand() % 500 + 200;
 	}
-
+private:
 	int chceckWaitClk() {
 		waitClk--;
 		return waitClk;
 	}
 
 	void getNewWaitClk() {
-		waitClk = rand() % 1000 + 500;
+		waitClk = rand() % 500 + 200;
 	}
 
 	void resetMove() {
@@ -63,7 +63,7 @@ public:
 			}
 		}
 	}
-
+public:
 	int * moveTo(
 		float mainSpeed,
 		ShaderProgram* sp,
@@ -148,7 +148,7 @@ public:
 		}
 
 		if (stop[0] && stop[1] && stop[2]) {
-			look = (lookAt(exhibit[obj].getPositionX(), exhibit[obj].getPositionZ()) + 180);
+			look = (lookAt(exhibit[obj].getPositionX(), exhibit[obj].getPositionZ()));
 		}
 		else
 		{
