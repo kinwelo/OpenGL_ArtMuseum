@@ -102,12 +102,6 @@ LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.o
 frameB("assets/paintings/fancyframe.obj"),
 statue1("assets/statues/classicStatue.obj"), thinker("assets/statues/thinker.obj");
 
-Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
-Exhibit exhibitions[] = {
-	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
-	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
-};
-
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj"), frameAlt("assets/paintings/frame.obj") ;
 MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/paintings/canvas.obj");
