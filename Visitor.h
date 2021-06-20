@@ -25,14 +25,14 @@ public:
 		speed = s;
 		waitClk = rand() % 5000 + 1000;
 	}
-
+private:
 	int chceckWaitClk() {
 		waitClk--;
 		return waitClk;
 	}
 
 	void getNewWaitClk() {
-		waitClk = rand() % 1000 + 500;
+		waitClk = rand() % 100 + 50;
 	}
 
 	void resetMove() {
@@ -52,7 +52,9 @@ public:
 		float position_x,
 		float position_z
 	) {
-		return atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI;
+		printf("%f\t%f\t%f\t%f\n", position_x, position_z, position_x - position[0], position_z - position[2]);
+		//return atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI;
+		return atan2((position_x - position[0]), (position_z - position[2]));
 	}
 
 	int getFreePosition(Exhibit * exhibit) {
@@ -63,7 +65,7 @@ public:
 			}
 		}
 	}
-
+public:
 	int * moveTo(
 		float mainSpeed,
 		ShaderProgram* sp,
@@ -148,7 +150,7 @@ public:
 		}
 
 		if (stop[0] && stop[1] && stop[2]) {
-			look = (lookAt(exhibit[obj].getPositionX(), exhibit[obj].getPositionZ()) + 180);
+			look = (lookAt(exhibit[obj].getPositionX(), exhibit[obj].getPositionZ()));
 		}
 		else
 		{

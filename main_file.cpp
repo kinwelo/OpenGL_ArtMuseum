@@ -87,13 +87,6 @@ MainDrawingMethod cer("assets/statues/cer.obj");
 RoomDrawingMethod room("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
 
-
-Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
-Exhibit exhibitions[] = {
-	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
-	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
-};
-
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj");
 MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/paintings/canvas.obj");
@@ -111,6 +104,12 @@ MainDrawingMethod door("assets/gallery/door.obj");
 MainDrawingMethod visitor1("assets/scene/character.obj");
 LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"), 
   frameB("assets/paintings/fancyframe.obj"), frameB2("assets/paintings/fancyframe.obj");
+
+Visitor visitorTom(&visitor1, 5, 2, 5, 0.02);
+Exhibit exhibitions[] = {
+	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
+	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
+};
 
 glm::vec3 calcDir(float kat_x, float kat_y) {
 	glm::vec4 dir = glm::vec4(0, 0, 1, 0);
@@ -237,11 +236,12 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	painting2_2.drawModel(sp_l, P, V, M, sources, -8.87f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
 	frameB.drawModel(sp_main, P, V, M, sources, -8.9f, 1.4f, 11.0f, 90.0f, 0.19f, 0.17f, 0.1f);
   
-  bussyObj = blackBearVisitor.moveTo(
+	bussyObj = visitorTom.moveTo(
 		visitor_speed,
 		sp_main, P, V, M, sources,
-		0.1, 0.1, 0.1, exhibitions, 2);
+		0.13, 0.13, 0.13, exhibitions, 2);
 	exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
+
 }
 
 //Procedura inicjująca
