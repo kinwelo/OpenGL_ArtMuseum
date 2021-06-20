@@ -127,12 +127,12 @@ LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.o
   frameB("assets/paintings/fancyframe.obj"),
 	statue1("assets/statues/classicStatue.obj"),thinker("assets/statues/thinker.obj");
 
-Visitor visitor(&visitorTom, -7.68f, 3.0f, -10.0f, 0.02);
+Visitor visitor(&visitorTom, -7.68f, 1.0f, -10.0f, 0.016);
 Exhibit exhibitions[] = {
-	Exhibit(-3.0f, 2.0f, -5.0f, canStay::RIGHT, 1),
-	Exhibit(-3.0f, 2.0f, -4.0f, canStay::RIGHT, 1),
-	Exhibit(2.68f, 3.0f, -5.0f, canStay::RIGHT, 1),
-	Exhibit(2.68f, 3.0f, -10.0f, canStay::RIGHT, 1),
+	Exhibit(-3.0f, 1.0f, -5.0f, canStay::LEFT, 1),
+	Exhibit(1.8f, 1.0f, 3.0f, canStay::RIGHT, 1),
+	Exhibit(2.3f, 1.0f, -5.0f, canStay::LEFT, 1)
+
 
 };
 
@@ -180,8 +180,8 @@ void keyCallback(
 		if (key == GLFW_KEY_D) speed_y = -1;
 		if (key == GLFW_KEY_S) speed_x = 1;
 		if (key == GLFW_KEY_W) speed_x = -1;
-		if (key == GLFW_KEY_UP) walk_speed = 10;
-		if (key == GLFW_KEY_DOWN) walk_speed = -10;
+		if (key == GLFW_KEY_UP) walk_speed = 7;
+		if (key == GLFW_KEY_DOWN) walk_speed = -7;
 
 	}
 	if (action == GLFW_RELEASE) {
@@ -330,7 +330,7 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	  bussyObj = visitor.moveTo(
 			visitor_speed,
 			sp_main, P, V, M, sources,
-		  0.13, 0.13, 0.13, exhibitions, 4);
+		  0.13, 0.13, 0.13, exhibitions, 3);
 		exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
 	}
 
