@@ -23,7 +23,7 @@ public:
 		position[1] = position_y;
 		position[2] = position_z;
 		speed = s;
-		waitClk = rand() % 5000 + 1000;
+		waitClk = rand() % 500 + 200;
 	}
 
 	int chceckWaitClk() {
@@ -32,7 +32,7 @@ public:
 	}
 
 	void getNewWaitClk() {
-		waitClk = rand() % 1000 + 500;
+		waitClk = rand() % 500 + 200;
 	}
 
 	void resetMove() {
@@ -52,7 +52,12 @@ public:
 		float position_x,
 		float position_z
 	) {
-		return atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI;
+		if (position[2] < position_z) {
+			return atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI;
+		}
+		else {
+			return 180 + (atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI);
+		}
 	}
 
 	int getFreePosition(Exhibit * exhibit) {
@@ -148,7 +153,7 @@ public:
 		}
 
 		if (stop[0] && stop[1] && stop[2]) {
-			look = (lookAt(exhibit[obj].getPositionX(), exhibit[obj].getPositionZ()) + 180);
+			look = (lookAt(exhibit[obj].getPositionX(), exhibit[obj].getPositionZ()));
 		}
 		else
 		{
