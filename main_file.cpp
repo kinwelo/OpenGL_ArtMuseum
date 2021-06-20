@@ -61,6 +61,8 @@ float visitor_speed = 1;
 float aspectRatio = 1;
 float walk_speed = 0;
 int * bussyObj;
+int* bussyObj2;
+int* bussyObj3;
 
 //FPS free fly
 //WASD - obroty kamerą
@@ -81,7 +83,7 @@ ShaderProgram* sp_main;
 ShaderProgram* sp_envmap;
 
 //All models
-MainDrawingMethod blackBear("assets/statues/BlackBear.obj");
+MainDrawingMethod bear("assets/statues/BlackBear.obj");
 MainDrawingMethod cer("assets/statues/cer.obj");
 RoomDrawingMethod room("assets/gallery/Museum.obj");
 SkyDrawingMethod sky("assets/scene/Egg.obj");
@@ -89,7 +91,16 @@ MainDrawingMethod monke("assets/statues/monke.obj");
 MainDrawingMethod dino("assets/statues/dino.obj");
 MainDrawingMethod cube("assets/paintings/canvas.obj");
 MainDrawingMethod dog("assets/statues/doge.obj");
-
+MainDrawingMethod coliseum("assets/statues/minikoloseum.obj");
+RoomDrawingMethod corridor("assets/gallery/corridor.obj");
+RoomDrawingMethod  transition("assets/gallery/transition.obj");
+MainDrawingMethod parquetry("assets/paintings/canvas.obj");
+MainDrawingMethod postument("assets/gallery/postument.obj");
+MainDrawingMethod door("assets/gallery/door.obj");
+MainDrawingMethod visitorTom("assets/scene/character.obj"), visitorAlice("assets/scene/character.obj"), visitorJack("assets/scene/character.obj");
+LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"),
+frameB("assets/paintings/fancyframe.obj"),
+statue1("assets/statues/classicStatue.obj"), thinker("assets/statues/thinker.obj");
 
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj"), frameAlt("assets/paintings/frame.obj") ;
@@ -116,22 +127,31 @@ vase3("assets/ceramics/vase3.obj"), vase4("assets/ceramics/vase4.obj");
 MainDrawingMethod  painting4_1("assets/paintings/canvas.obj"), painting4_2("assets/paintings/canvas.obj"), painting4_3("assets/paintings/canvas.obj"),
 painting4_4("assets/paintings/canvas.obj"), painting4_5("assets/paintings/canvas.obj");
 
-MainDrawingMethod coliseum("assets/statues/minikoloseum.obj");
-RoomDrawingMethod corridor("assets/gallery/corridor.obj");
-RoomDrawingMethod  transition("assets/gallery/transition.obj");
-MainDrawingMethod parquetry("assets/paintings/canvas.obj");
-MainDrawingMethod postument("assets/gallery/postument.obj");
-MainDrawingMethod door("assets/gallery/door.obj");
-MainDrawingMethod visitorTom("assets/scene/character.obj"), visitorAlice("assets/scene/character.obj");
-LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"), 
-  frameB("assets/paintings/fancyframe.obj"),
-	statue1("assets/statues/classicStatue.obj"),thinker("assets/statues/thinker.obj");
+
 
 Visitor visitor(&visitorTom, -7.68f, 1.0f, -10.0f, 0.016);
 Exhibit exhibitions[] = {
 	Exhibit(-3.0f, 1.0f, -5.0f, canStay::LEFT, 1),
-	Exhibit(1.8f, 1.0f, 3.0f, canStay::RIGHT, 1),
-	Exhibit(2.3f, 1.0f, -5.0f, canStay::LEFT, 1)
+	Exhibit(1.8f, 1.0f, 3.0f, canStay::LEFT, 1),
+	Exhibit(0.3f, 1.0f, -4.8f, canStay::LEFT, 1)
+
+
+};
+
+Visitor visitor2(&visitorAlice,0.68f, 1.0f, 16.0f, 0.016);
+Exhibit exhibitions2[] = {
+	Exhibit(-3.87f, 1.0f, 18.0f, canStay::LEFT, 1),
+	Exhibit(-3.0f, 1.0f, 16.0f, canStay::LEFT, 1),
+	Exhibit(-5.3f, 1.0f, 14.0f, canStay::RIGHT, 1)
+
+
+};
+
+Visitor visitor3(&visitorJack, -3.0f, 1.0f, 38.0f, 0.016);
+Exhibit exhibitions3[] = {
+	Exhibit(0.70f, 1.0f, 48.9f, canStay::RIGHT, 1),
+	Exhibit(-1.70f, 1.0f, 43.9f, canStay::LEFT, 1),
+	Exhibit(-4.70f, 1.0f, 41.9f, canStay::RIGHT, 1)
 
 
 };
@@ -232,13 +252,13 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	lion.drawModel(sp_envmap, P, V, M, sources, 1.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
 	lion.drawModel(sp_envmap, P, V, M, sources, -7.8f, 1.0f, 3.7f, 180.0f, 0.1f, 0.1f, 0.1f);
 	//Statue3Room2
-	monke.drawModel(sp_l, P, V, M, sources, -7.1f, 2.7f, 21.8f, 170.0f, 0.013f,0.016f, 0.013f);
+	monke.drawModel(sp_l, P, V, M, sources, -7.1f, 2.7f, 21.8f, 170.0f, 0.015f,0.016f, 0.013f);
 	cube.drawModel(sp_l, P, V, M, sources, -7.1f, 1.1f, 22.0f, 170.0f, 1.8f, 0.8f, 1.8f);
 	//Statue4Room2
 	dino.drawModel(sp_l, P, V, M, sources, 1.2f, 2.9f, 21.9f, 190.0f, 0.012f, 0.012f, 0.012f);
 	cube.drawModel(sp_l, P, V, M, sources, 1.2f, 1.1f, 21.6f, 190.0f, 1.8f, 0.8f, 1.8f);
 	//Statue5Room2
-	blackBear.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 16.0f, 100.0f, 0.07f, 0.07f, 0.07f);
+	bear.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 16.0f, -80.0f, 0.07f, 0.07f, 0.07f);
 	postument.drawModel(sp_main, P, V, M, sources, -3.0f, 1.1f, 16.0f, 0.0f, 0.4f, 0.3f, 0.4f);
 	//Statue6Room2
 	dog.drawModel(sp_main, P, V, M, sources, -3.0f, 2.0f, 13.0f, 240.0f, 0.004f, 0.004f, 0.004f);
@@ -329,10 +349,25 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 
 	  bussyObj = visitor.moveTo(
 			visitor_speed,
-			sp_main, P, V, M, sources,
+			sp_l, P, V, M, sources,
 		  0.13, 0.13, 0.13, exhibitions, 3);
 		exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
+
+	   bussyObj2 = visitor2.moveTo(
+			visitor_speed,
+			sp_l, P, V, M, sources,
+			0.13, 0.13, 0.13, exhibitions2, 3);
+		exhibitions[*bussyObj2].placeToWatch[*(bussyObj2 + 1)][0] = *(bussyObj2 + 2);
+
+		bussyObj3 = visitor3.moveTo(
+			visitor_speed,
+			sp_l, P, V, M, sources,
+			0.13, 0.13, 0.13, exhibitions3, 3);
+		exhibitions[*bussyObj3].placeToWatch[*(bussyObj3 + 1)][0] = *(bussyObj3 + 2);
+
 	}
+
+
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
@@ -384,13 +419,12 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint vaseTex = readTexture("assets/materials/vase1.png");
 	GLuint concreteTex = readTexture("assets/materials/concrete.png");
 
-	GLuint visitorTex1 = readTexture("assets/materials/skins/skin1.png");
-	GLuint visitorTex2 = readTexture("assets/materials/skins/skin2.png");
-	GLuint visitorTex3 = readTexture("assets/materials/skins/skin5.png");
-	GLuint visitorTex4 = readTexture("assets/materials/skins/skin6.png");
+	GLuint visitorTex1 = readTexture("assets/materials/skins/skin2.png");
+	GLuint visitorTex2 = readTexture("assets/materials/skins/skin5.png");
+	GLuint visitorTex3 = readTexture("assets/materials/skins/skin4.png");
 
 
-	blackBear.texture = bronzeTex;
+	bear.texture = bronzeTex;
 	dog.texture = bronzeTex;
 	cer.texture = steelTex;
 	//cer.texture_refl = refTex;
@@ -436,7 +470,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	cube.texture = postumentTex;
 	door.texture = doorTex;
 	visitorTom.texture = visitorTex1;
-	visitorAlice.texture = visitorTex3;
+	visitorAlice.texture = visitorTex2;
+	visitorJack.texture = visitorTex3;
 	lion.texture = postumentTex;
 	lion.texture_refl = refTex;
 	brain.texture = frameTex;
