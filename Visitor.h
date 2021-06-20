@@ -25,7 +25,7 @@ public:
 		speed = s;
 		waitClk = rand() % 500 + 200;
 	}
-
+private:
 	int chceckWaitClk() {
 		waitClk--;
 		return waitClk;
@@ -52,12 +52,7 @@ public:
 		float position_x,
 		float position_z
 	) {
-		if (position[2] < position_z) {
-			return atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI;
-		}
-		else {
-			return 180 + (atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI);
-		}
+		return atan((position_x - position[0]) / (position_z - position[2])) * 180 / PI;
 	}
 
 	int getFreePosition(Exhibit * exhibit) {
@@ -68,7 +63,7 @@ public:
 			}
 		}
 	}
-
+public:
 	int * moveTo(
 		float mainSpeed,
 		ShaderProgram* sp,

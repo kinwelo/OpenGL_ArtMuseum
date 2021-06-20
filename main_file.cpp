@@ -91,6 +91,12 @@ MainDrawingMethod cube("assets/paintings/canvas.obj");
 MainDrawingMethod dog("assets/statues/doge.obj");
 
 
+Visitor blackBearVisitor(&blackBear, 5, 2, 5, 0.02);
+Exhibit exhibitions[] = {
+	Exhibit(-7.0f, 1.0f, 10.0f, canStay::LEFT, 1),
+	Exhibit(2.68f, 2.5f, 7.0f, canStay::RIGHT, 1)
+};
+
 //Room1
 MainDrawingMethod  painting("assets/paintings/canvas.obj"), frame("assets/paintings/frame.obj"), frameAlt("assets/paintings/frame.obj") ;
 MainDrawingMethod  painting2("assets/paintings/canvas.obj"), exitSign("assets/paintings/canvas.obj");
@@ -293,46 +299,12 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	painting2_2.drawModel(sp_l, P, V, M, sources, -8.87f, 3.2f, 11.0f, 270.0f, 2.3f, 1.8f, 0.003f);
 	frameB.drawModel(sp_main, P, V, M, sources, -8.9f, 1.4f, 11.0f, 90.0f, 0.19f, 0.17f, 0.1f);
   
-	//Painting1Room3
-	painting3_1.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, 31.0f, 90.0f, 1.0f, 1.0f, 0.003f);
-	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, 31.0f, 90.0f, 0.5f, 0.5f, 0.5f);
-	//Painting2Room3
-	painting3_2.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, 35.0f, 90.0f, 1.4f, 1.4f, 0.003f);
-	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, 35.0f, 90.0f, 0.7f, 0.7f, 0.7f);
-	//Painting3Room3
-	painting3_3.drawModel(sp_l, P, V, M, sources, 2.68f, 3.0f, 39.0f, 90.0f, 1.0f, 1.0f, 0.003f);
-	frame.drawModel(sp_main, P, V, M, sources, 2.8f, 3.0f, 39.0f, 90.0f, 0.5f, 0.5f, 0.5f);
-	//Painting4Room3
-	painting3_4.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, 33.0f, 270.0f, 2.6f, 1.5f, 0.003f);
-	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, 33.0f, 270.0f, 1.2f, 0.7f, 0.7f);
-	//Painting5Room3
-	painting3_5.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, 37.0f, 270.0f, 2.6f, 1.5f, 0.003f);
-	frame.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, 37.0f, 270.0f, 1.2f, 0.7f, 0.7f);
-	//Painting1Room4
-	painting4_1.drawModel(sp_l, P, V, M, sources, -6.70f, 3.3f, 57.9f, 0.0f,1.0f, 3.0f, 0.015f);
-	frameAlt.drawModel(sp_l, P, V, M, sources, -6.7f, 3.3f, 58.0f, 0.0f, 0.5f, 1.4f, 0.7f);
-	//Painting2Room4
-	painting4_2.drawModel(sp_l, P, V, M, sources, -8.78f, 3.1f, 54.0f, 270.0f, 2.6f, 1.5f, 0.003f);
-	frameAlt.drawModel(sp_main, P, V, M, sources, -8.9f, 3.1f, 54.0f, 270.0f, 1.2f, 0.7f, 0.7f);
-	//Painting3Room4
-	painting4_3.drawModel(sp_l, P, V, M, sources, 1.70f, 4.3f, 57.9f, 0.0f, 1.0f, 1.0f, 0.03f);
-	frameAlt.drawModel(sp_l, P, V, M, sources, 1.7f, 4.3f, 58.0f, 0.0f, 0.5f, 0.5f, 0.5f);
-	//Painting4Room4
-	painting4_4.drawModel(sp_l, P, V, M, sources, -4.00f, 3.6f, 57.9f, 0.0f, 2.6f, 1.5f, 0.035f);
-	frameAlt.drawModel(sp_l, P, V, M, sources, -4.0f, 3.6f, 58.0f, 0.0f, 1.2f, 0.7f, 0.7f);
-	//Painting5Room4
-	painting4_5.drawModel(sp_l, P, V, M, sources, -1.0f, 2.9f, 57.9f, 0.0f, 1.0f, 1.0f, 0.03f);
-	frameAlt.drawModel(sp_l, P, V, M, sources, -1.0f, 2.9f, 58.0f, 0.0f, 0.5f, 0.5f, 0.5f);
-
-    //Visitors with simple "AI"
-   // visitor1.drawModel(sp_l, P, V, M, sources, 0.0f, 1.0f, -10.0f, 20.0f, 0.13f, 0.13f, 0.13f);
-
-	  bussyObj = visitor.moveTo(
-			visitor_speed,
-			sp_main, P, V, M, sources,
-		  0.13, 0.13, 0.13, exhibitions, 4);
-		exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
-	}
+  bussyObj = blackBearVisitor.moveTo(
+		visitor_speed,
+		sp_main, P, V, M, sources,
+		0.1, 0.1, 0.1, exhibitions, 2);
+	exhibitions[*bussyObj].placeToWatch[*(bussyObj +1)][0] = *(bussyObj + 2);
+}
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
