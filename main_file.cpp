@@ -97,6 +97,7 @@ RoomDrawingMethod  transition("assets/gallery/transition.obj");
 MainDrawingMethod parquetry("assets/paintings/canvas.obj");
 MainDrawingMethod postument("assets/gallery/postument.obj");
 MainDrawingMethod door("assets/gallery/door.obj");
+MainDrawingMethod easter("assets/paintings/canvas.obj"),egg("assets/paintings/canvas.obj");
 MainDrawingMethod visitorTom("assets/scene/character.obj"), visitorAlice("assets/scene/character.obj"), visitorJack("assets/scene/character.obj");
 LionDrawingMethod lion("assets/statues/lion.obj"), brain("assets/statues/brain.obj"),
 frameB("assets/paintings/fancyframe.obj"),
@@ -267,8 +268,9 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Statue1Room3
 	coliseum.drawModel(sp_l, P, V, M, sources, -3.0f, 2.0f, 37.0f, 0.0f, 0.0009f, 0.0009f, 0.0009f);
 	cube.drawModel(sp_l, P, V, M, sources, -3.0f, 1.1f, 37.0f, 0.0f, 2.3f, 1.5f, 2.3f);
-
+	//Statue2Room3
 	statue1.drawModel(sp_l, P, V, M, sources, 1.7f, 1.1f, 41.0f, 190.0f, 0.015f, 0.015f, 0.015f);
+	//Statue3Room3
 	thinker.drawModel(sp_l, P, V, M, sources, -8.1f, 1.0f, 41.0f, 140.0f, 0.007f, 0.007f, 0.007f);
 
 	//Ceramics1Room4
@@ -343,9 +345,10 @@ void allDrawInOnePlace(glm::mat4 P, glm::mat4 V, glm::mat4 M) {
 	//Painting5Room4
 	painting4_5.drawModel(sp_l, P, V, M, sources, -1.0f, 2.9f, 57.9f, 0.0f, 1.0f, 1.0f, 0.03f);
 	frameAlt.drawModel(sp_l, P, V, M, sources, -1.0f, 2.9f, 58.0f, 0.0f, 0.5f, 0.5f, 0.5f);
+	easter.drawModel(sp_l, P, V, M, sources, 9.0f, 2.9f, 53.7f,110.0f, 3.5f, 2.5f, 0.05f);
+	egg.drawModel(sp_l, P, V, M, sources, 9.0f, 2.9f, 57.3f, 70.0f, 4.0f, 2.5f, 0.05f);
 
     //Visitors with simple "AI"
-   // visitor1.drawModel(sp_l, P, V, M, sources, 0.0f, 1.0f, -10.0f, 20.0f, 0.13f, 0.13f, 0.13f);
 
 	  bussyObj = visitor.moveTo(
 			visitor_speed,
@@ -413,6 +416,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	GLuint signTex = readTexture("assets/materials/sign.png");
 	GLuint monkeTex = readTexture("assets/materials/monkey.png");
 	GLuint tyranosaurusTex = readTexture("assets/materials/dino.png"); // :)
+	GLuint easterTex = readTexture("assets/paintings/patterns/easter.png");
+	GLuint eggTex = readTexture("assets/paintings/patterns/egg.png");
 	GLuint coliseumTex = readTexture("assets/materials/koloseum.png");
 	GLuint statueTex = readTexture("assets/materials/statue.png");
 	GLuint thinkerTex = readTexture("assets/materials/TheThinker_Diffuse.png");
@@ -475,12 +480,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 	lion.texture = postumentTex;
 	lion.texture_refl = refTex;
 	brain.texture = frameTex;
-	
 	brain.texture_refl = refTex;
 	exitSign.texture = signTex;
 	monke.texture = monkeTex;
 	dino.texture = tyranosaurusTex;
 	coliseum.texture = coliseumTex;
+	easter.texture = easterTex;
+	egg.texture = eggTex;
 	statue1.texture = statueTex;
 	thinker.texture = thinkerTex;
 }
