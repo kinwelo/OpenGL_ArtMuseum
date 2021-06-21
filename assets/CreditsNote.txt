@@ -1,12 +1,21 @@
-Modele:
-
+Models sites:
 free3d.com 
 poly.google.com 
-reszta: samodzielnie zrobione
+kenney.nl
 
-Tekstury:
+Models authors:
+@Poly by google - many models
+@printable_models - many models
+@Ryan „Sleep paralysis demon” Zheng - Museum Model
+@kenney.nl - visitors
+@Hans Benn - lion
+rest: self-made in blender
 
+Textures:
+pixabay.com
 freetextures.com
-obrazy - wikimedia gdzie autorzy umarli X lat temu
-instagram kociepecie za zgodą autora
-reszta: samodzielnie zrobione
+freestocktextures.com
+commons.wikimedia.org - historical ones
+@kociepecie on instagram - with the consent of the author
+@Hans Benn - lion
+rest: self-made
