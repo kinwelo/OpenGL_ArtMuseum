@@ -37,9 +37,9 @@ public:
 		switch (canStay::AROUND)
 		{
 		case LEFT:
-			placeToWatch[0][1] = position[0] - distance;
-			placeToWatch[0][2] = 1;
-			placeToWatch[0][3] = position[2] + distance;
+			placeToWatch[0][1] = position[0] - distance;//odleglosc od danej pozycji obiektu exhibit dla X
+			placeToWatch[0][2] = 1;//odleglosc od danej pozycji obiektu exhibit dla Y. Stale bo nie mamy schodow itd
+			placeToWatch[0][3] = position[2] + distance;//odleglosc od danej pozycji obiektu exhibit dla Z
 
 			placeToWatch[1][1] = position[0] - distance;
 			placeToWatch[1][2] = 1;

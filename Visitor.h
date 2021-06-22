@@ -1,5 +1,4 @@
 #include <Object3D.h>
-#include <firstMethodDrawing.h>
 #include <math.h>
 #include <Object.h>
 #include <Exhibit.h>

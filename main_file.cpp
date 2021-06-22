@@ -41,7 +41,6 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "Object3D.h"
 #include <Visitor.h>
 #include <Exhibit.h>
-#include <firstMethodDrawing.h>
 #include <MainDrawingMethod.h>
 #include <SecondMethodDrawing.h>
 #include <RoomDrawingMethod.h>
@@ -434,7 +433,6 @@ void initOpenGLProgram(GLFWwindow* window) {
 	cer.texture = steelTex;
 	//cer.texture_refl = refTex;
 	room.texture = wallTex;
-	//room2ndpart.texture = wallTex;
 	sky.texture = skyTex;
 	//Room1
 	painting.texture = paintingTex1;
@@ -548,11 +546,10 @@ int main(void)
 
 	initOpenGLProgram(window); //Operacje inicjujące
 
-	//Główna pętla
-	float angle = 0; //zadeklaruj zmienną przechowującą aktualny kąt obrotu
 	float kat_x = 0;
 	float kat_y = 0;
 	glfwSetTime(0); //Zeruj timer
+	//Główna pętla
 	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
 	{
 		
