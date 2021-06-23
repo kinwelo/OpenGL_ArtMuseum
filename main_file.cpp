@@ -496,6 +496,57 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	delete sp_l;
 	delete sp_main;
 	delete sp_envmap;
+	glDeleteTextures(1, &bear.texture);
+	glDeleteTextures(1, &dog.texture);
+	glDeleteTextures(1, &cer.texture);
+	glDeleteTextures(1, &room.texture);
+	glDeleteTextures(1, &sky.texture);
+	glDeleteTextures(1, &painting.texture);
+	glDeleteTextures(1, &painting2.texture);
+	glDeleteTextures(1, &painting3.texture);
+	glDeleteTextures(1, &painting4.texture);
+	glDeleteTextures(1, &painting5.texture);
+	glDeleteTextures(1, &painting2_1.texture);
+	glDeleteTextures(1, &painting2_2.texture);
+	glDeleteTextures(1, &painting3_1.texture);
+	glDeleteTextures(1, &painting3_2.texture);
+	glDeleteTextures(1, &painting3_3.texture);
+	glDeleteTextures(1, &painting3_4.texture);
+	glDeleteTextures(1, &painting3_5.texture);
+	glDeleteTextures(1, &genie.texture);
+	glDeleteTextures(1, &jug.texture);
+	glDeleteTextures(1, &vase1.texture);
+	glDeleteTextures(1, &vase2.texture);
+	glDeleteTextures(1, &vase3.texture);
+	glDeleteTextures(1, &vase4.texture);
+	glDeleteTextures(1, &painting4_1.texture);
+	glDeleteTextures(1, &painting4_2.texture);
+	glDeleteTextures(1, &painting4_3.texture);
+	glDeleteTextures(1, &painting4_4.texture);
+	glDeleteTextures(1, &painting4_5.texture);
+	glDeleteTextures(1, &frameAlt.texture);
+	glDeleteTextures(1, &corridor.texture);
+	glDeleteTextures(1, &transition.texture);
+	glDeleteTextures(1, &parquetry.texture);
+	glDeleteTextures(1, &postument.texture);
+	glDeleteTextures(1, &cube.texture);
+	glDeleteTextures(1, &door.texture);
+	glDeleteTextures(1, &visitorTom.texture);
+	glDeleteTextures(1, &visitorAlice.texture);
+	glDeleteTextures(1, &visitorJack.texture);
+	glDeleteTextures(1, &lion.texture);
+	glDeleteTextures(1, &lion.texture_refl);
+	glDeleteTextures(1, &brain.texture);
+	glDeleteTextures(1, &brain.texture_refl);
+	glDeleteTextures(1, &exitSign.texture);
+	glDeleteTextures(1, &monke.texture);
+	glDeleteTextures(1, &dino.texture);
+	glDeleteTextures(1, &coliseum.texture);
+	glDeleteTextures(1, &easter.texture);
+	glDeleteTextures(1, &egg.texture);
+	glDeleteTextures(1, &statue1.texture);
+	glDeleteTextures(1, &thinker.texture);
+
 }
 
 //Procedura rysująca zawartość sceny
