@@ -10,7 +10,7 @@ We started with almost no knowledge of OpenGL and 3d graphics and in the end we 
 - Models were loaded with the Assimp library.
 - Shaders were written in GLSL language.
 - Trivially easy keyboard controls.
-- Yeah, and there is very simple "AI" too :P
+- Yeah, and there is very simple "AI" too 😛
 
 ## Controls
 - Up/Down arrows: moving forward/backward around the museum.
