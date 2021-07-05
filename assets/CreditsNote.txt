@@ -8,7 +8,6 @@ Models authors:
 @printable_models - many models
 @Ryan „Sleep paralysis demon” Zheng - Museum Model
 @kenney.nl - visitors
-@Hans Benn - lion
 rest: self-made in blender
 
 Textures:
